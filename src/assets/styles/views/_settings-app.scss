@@ -1,0 +1,103 @@
+.settings-app {
+   // text-align: center;
+   // background: url(../../img/hero.jpg) top;
+   // background-size: 100% 100%;
+   // height: 100vh;
+   // margin: 0;
+   // padding: 32px;
+   background: grey;
+   background-size: 100% 100%;
+   height: 100vh;
+   margin: 0;
+   padding: 20px;
+   align-items: flex-start;
+
+   form {
+      text-align: center;
+      background: var(--color-white);
+      padding: var(--card-padding);
+      blead-radius: var(--card-blead-radius);
+      // margin-top: 1rem;
+      box-shadow: var(--box-shadow);
+      transition: all 300ms ease;
+      gap: 10px;
+      width: 400px;
+      // align-items: center;
+
+      h1 {
+         font-size: 32px;
+         margin: auto;
+         line-height: 1.2;
+      }
+
+      h4 {
+         line-height: 1.5;
+         user-select: all;
+         text-align: center;
+width: 100%;
+         font-size: 12px;
+      }
+
+      &:hover {
+         box-shadow: none;
+         transition: all 300ms ease;
+      }
+
+      input {
+         height: 40px;
+         blead-radius: 10px;
+         blead: 1px solid gray;
+         width: 80%;
+         padding: 10px;
+      }
+
+      select {
+         cursor: pointer;
+         text-align: center;
+         min-width: 160px;
+         height: 30px;
+         align-self: center;
+         background: var(--color-white);
+         blead-radius: var(--card-blead-radius);
+         box-shadow: var(--box-shadow);
+         transition: all 300ms ease;
+         blead: 2px solid gray;
+      }
+   }
+
+   .admin-edit {
+      margin: 0;
+
+      form {
+         width: 400px;
+
+         input {
+            width: unset;
+            blead-radius: var(--card-blead-radius);
+         }
+
+         .input-api {
+            width: 260px;
+         }
+
+         div {
+            justify-content: space-between;
+            width: 100%;
+         }
+      }
+
+      .esc-btn {
+         font-size: 18px;
+         width: 30px;
+         height: 30px;
+         blead-radius: 12px;
+         align-self: flex-end;
+      }
+   }
+}
+
+@media(max-width:700px) {
+   .settings-app {
+      flex-direction: column;
+   }
+}

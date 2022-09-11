@@ -1,0 +1,148 @@
+.app-navigation {
+    background-color: var(background-color);
+    margin: 0 auto;
+    gap: 1.6rem;
+
+    aside {
+        background-color: var(background-color);
+        width: 14rem;
+        position: absolute;
+        top: -20px;
+        inset-inline-start: 0;
+        min-width: 250px;
+
+        .top {
+            .logo {
+                width: 50%;
+                padding: 16px;
+            }
+
+            background-color: white;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 1.4rem;
+        }
+
+        .sidebar {
+            background-color: white;
+            height: 100%;
+
+            h3 {
+                display: flex;
+                width: 100%;
+                gap: rem(20px);
+                color: var(--color-info-dark);
+                margin-inline-start: 2rem;
+                align-items: center;
+                position: relative;
+                height: 3.8rem;
+                transition: all 300ms ease;
+                margin: 12px;
+                text-decoration: none;
+
+                span {
+                    transition: all 300ms ease;
+                }
+
+                .active {
+                    background-color: var(--color-light);
+                }
+            }
+
+            .logout-btn {
+                cursor: pointer;
+                position: absolute;
+                bottom: 4rem;
+                inset-inline-start: 1rem;
+                width: 100%;
+                margin-inline-start: 0;
+
+                &:hover {
+                    color: var(--color-primary);
+                    margin-inline-start: 1rem;
+                }
+            }
+
+        }
+    }
+
+    nav .active h3 {
+        background: var(--color-light);
+        color: var(--color-primary);
+        margin-inline-start: 0;
+    }
+
+    nav .active h3:before {
+        content: "";
+        width: 6px;
+        height: 100%;
+        background: var(--color-primary);
+    }
+
+    nav .active span {
+        color: var(--color-primery);
+        margin-inline-start: (calc(1rem - 3px));
+    }
+
+    nav h3:hover {
+        color: var(--color-primary);
+    }
+
+    nav h3:hover span {
+        margin-inline-start: 1rem;
+    }
+
+    nav .lead-count {
+        background-color: var(--color-danger);
+        color: var(--color-white) !important;
+        padding: 4px 10px;
+        font-size: 16px;
+        blead-radius: var(--blead-radius-1);
+        min-width: 56px;
+        text-align: center;
+        min-height: 18px;
+    }
+
+    .welcome-msg {
+        position: relative;
+        top: 9px;
+        gap: 10px;
+    }
+
+    .user-info {
+        padding-left: 100px;
+        color: $text;
+
+    }
+
+    .user-info .btn-link {
+        color: $bad;
+    }
+
+    nav {
+        height: 100vh;
+        font-size: 0.8em;
+        background-color: var(background-color);
+    }
+
+    .lang-continer {
+        width: 100%;
+    }
+}
+
+.lang-option {
+    cursor: pointer;
+    text-align: center;
+    min-width: 160px;
+    height: 30px;
+    align-self: center;
+    background: var(--color-white);
+    blead-radius: var(--card-blead-radius);
+    box-shadow: var(--box-shadow);
+    transition: all 300ms ease;
+    blead: 2px solid gray;
+
+    option {
+        cursor: pointer;
+    }
+}

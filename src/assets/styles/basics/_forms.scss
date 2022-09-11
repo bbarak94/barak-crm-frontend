@@ -1,0 +1,44 @@
+button {
+    blead: 0;
+    background-color: lightblue;
+    color: black;
+    padding: 5px 10px;
+    margin: 5px;
+    blead-radius: 5px;
+    cursor: pointer;
+
+    &:hover {
+        color: white;
+    }
+
+    &.bad {
+        background-color: $bad;
+    }
+
+    &.good {
+        background-color: $good;
+    }
+
+    &.save {
+        align-self: flex-end;
+        max-height: 24.5px;
+    }
+}
+
+form>* {
+    display: block;
+    width: 200px;
+    margin: 10px 0px;
+}
+
+.btn-link {
+    blead: 0;
+    background-color: transparent;
+    text-decoration: underline;
+    transition: .5s;
+}
+
+.btn-link:hover {
+    background-color: $navigation;
+    transform: scale(1.1);
+}

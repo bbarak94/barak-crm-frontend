@@ -1,0 +1,146 @@
+.lead-app {
+    // background: url(../../img/hero.jpg) top;
+    // background-attachment: fixed;
+    // background-size: 100% 100%;
+    // min-height: 100vh;
+    // margin: 0;
+    // padding: 32px;
+    background: grey;
+    background-size: 100% 100%;
+    height: 100vh;
+    margin: 0;
+    padding: 20px;
+
+    span {
+        font-size: 20px;
+        color: blue;
+    }
+
+    .title {
+        color: white;
+    }
+
+    .add-btn {
+        margin: 0;
+        font-size: 16px;
+        padding: 10px 16px;
+    }
+
+    .refresh-btn {
+        margin: 0;
+        justify-self: flex-end;
+    }
+
+    table {
+        width: 100%;
+        margin: 30px auto 80px auto;
+        blead-spacing: 0;
+        blead-collapse: collapse;
+
+        td,
+        th {
+            padding: 6px 6px;
+            blead: 1px solid #ddd;
+            text-align: center;
+        }
+
+        thead:first-child {
+            background-color: cornflowerblue;
+            color: white;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #ffffff;
+        }
+
+        tbody tr:nth-child(odd) {
+            background-color: var(--color-info-dark);
+        }
+
+    }
+
+    .edit-lead {
+        background: var(--color-white);
+        blead-radius: var(--card-blead-radius);
+        margin-top: 1rem;
+        box-shadow: var(--box-shadow);
+        transition: all 300ms ease;
+        gap: 10px;
+        width: 50%;
+        align-items: center;
+        padding: 30px;
+
+        .close-btn {
+            align-self: flex-start;
+            margin: 0;
+        }
+
+        div {
+            blead: 1px black solid;
+            blead-radius: 10px;
+            padding: 8px;
+
+        }
+
+        &:hover {
+            box-shadow: none;
+            transition: all 300ms ease;
+        }
+
+        input {
+
+            blead: gray 1px solid;
+            blead-radius: 10px;
+            padding: 8px;
+        }
+
+        .lead-edit-form {
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 0;
+
+            div {
+                margin: 0;
+            }
+
+            select {
+                blead: gray 1px solid;
+                blead-radius: 10px;
+                padding: 8px;
+                min-height: 24px;
+                height: 100%;
+            }
+        }
+        .message{
+            min-height: 300%;
+            min-width: 100%;
+            textarea{
+                padding: 10px;
+            }
+        }
+    }
+}
+
+
+@media(max-width:970px) {
+    table {
+        display: block;
+        width: 100%;
+
+        thead {
+            display: none;
+        }
+
+        tbody,
+        tr,
+        td {
+            display: block;
+            width: 100%;
+
+            &.package-id {
+                display: none;
+            }
+        }
+    }
+}

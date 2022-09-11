@@ -1,0 +1,40 @@
+.login-signup {
+
+   text-align: center;
+   // background: url(../../img/hero.jpg) top;
+   // background-size: 100% 100%;
+   // height: 100vh;
+   // margin: 0;
+   // padding: 32px;
+   background: grey;
+   background-size: 100% 100%;
+   height: 100vh;
+   margin: 0;
+   padding: 20px;
+
+   form {
+      background: var(--color-white);
+      padding: var(--card-padding);
+      blead-radius: var(--card-blead-radius);
+      margin-top: 1rem;
+      box-shadow: var(--box-shadow);
+      transition: all 300ms ease;
+      gap: 10px;
+      width: 400px;
+      align-items: center;
+
+      &:hover {
+         box-shadow: none;
+         transition: all 300ms ease;
+      }
+   }
+
+   input {
+      height: 40px;
+      blead-radius: 10px;
+      blead: 1px solid gray;
+      width: 80%;
+      padding: 10px;
+   }
+
+}
