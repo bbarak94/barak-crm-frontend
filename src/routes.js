@@ -4,6 +4,7 @@ import { PrinterApp } from './pages/printer-app'
 import { ZoneApp } from './pages/zone-app'
 import { SettingsApp } from './pages/settings-app'
 import { LoginSignup } from './pages/login-signup'
+import { CampaignApp } from './pages/campaign-app'
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 
 const routes = [
@@ -16,6 +17,11 @@ const routes = [
       path: '/lead',
       component: <LeadApp />,
       label: 'Leads',
+   },
+   {
+      path: '/campaign',
+      component: <CampaignApp />,
+      label: 'Campaigns',
    },
    // {
    //    path: '/printer',

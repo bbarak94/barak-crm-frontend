@@ -1,27 +1,33 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { useTranslation } from 'react-i18next';
 import { leadService } from "../services/lead.service"
 
 import { removeLead, setLead, saveLead, loadLeads, getActionSetLead } from "../store/actions/lead.action"
 
-import { PrinterModal } from './printer-modal'
-
-
 export const LeadPreview = ({ user, setIsEdit, lead }) => {
    const dispatch = useDispatch()
    const { t, i18n } = useTranslation();
+   const { users } = useSelector((storeState) => storeState.userModule)
 
    // const [zoneName, setZoneName] = useState('')
    const [newLead, setNewLead] = useState()
    const [modal, setModal] = useState(false);
    const [_id, set_id] = useState(lead?._id || '')
    const [status, setStatus] = useState(lead?.status || '')
-   const [fullname, setFullname] = useState(lead?.fullname || '')
+   const [managerName, setManagerName] = useState(lead?.managerName || '')
+   const [businessName, setBusinessName] = useState(lead?.businessName || '')
+   const [address, setAddress] = useState(lead?.address || '')
+   const [address2, setAddress2] = useState(lead?.address2 || '')
+   const [classDesc, setClassDesc] = useState(lead?.classDesc || '')
+   const [role, setRole] = useState(lead?.role || '')
    const [phoneNumber, setPhoneNumber] = useState(lead?.phoneNumber || '')
+   const [phoneNumber2, setPhoneNumber2] = useState(lead?.phoneNumber2 || '')
+   const [phoneNumber3, setPhoneNumber3] = useState(lead?.phoneNumber3 || '')
    const [message, setMessage] = useState(lead?.message || '')
    const [createdAt, setCreatedAt] = useState(lead?.createdAt || '')
    const [email, setEmail] = useState(lead?.email || '')
+   const [creator, setCreator] = useState(lead?.creator || '')
 
 
    useEffect(() => {
@@ -29,21 +35,24 @@ export const LeadPreview = ({ user, setIsEdit, lead }) => {
          const emptyLead = await leadService.getEmptyLead()
          setNewLead(emptyLead)
          set_id(emptyLead._id || '')
-         setFullname(emptyLead.fullname)
+         setBusinessName(emptyLead.businessName)
+         setManagerName(emptyLead.managerName)
          setPhoneNumber(emptyLead.phoneNumber)
-         // setAddress(emptyLead.address)
+         setClassDesc(emptyLead.classDesc)
+         setPhoneNumber2(emptyLead.phoneNumber2)
+         setPhoneNumber3(emptyLead.phoneNumber3)
+         setRole(emptyLead.role)
+         setAddress(emptyLead.address)
+         setAddress2(emptyLead.address2)
          setMessage(emptyLead.message)
          setCreatedAt(emptyLead.createdAt)
-         // setEstSupply(emptyLead.estSupply)
          setEmail(emptyLead.email)
-         // setTotalPrice(emptyLead.totalPrice)
-         // setDishes(emptyLead.dishes)
+         setCreator(emptyLead.creator)
          setStatus(emptyLead.status)
       }
 
       (!lead) ? getEmptyLead() : setNewLead(lead)
       // setNewLead(emptyLead)
-      // setZone()
    }, [])
 
    const toggleModal = () => {
@@ -56,20 +65,6 @@ export const LeadPreview = ({ user, setIsEdit, lead }) => {
       document.body.classList.remove('active-modal')
    }
 
-   // const onPrint = async () => {
-   //    toggleModal()
-   //    const newLead = { ...lead }
-   //    newLead.status = 'Printed'
-   //    await dispatch((saveLead(newLead)))
-   // }
-
-   // const setZone = (ev) => {
-   //    user.zones.map((zone, idx) => {
-   //       zone.streets.map((street) => {
-   //          if (lead.address.includes(zone.city) && lead.address.includes(street)) setZoneName(zone.name)
-   //       })
-   //    })
-   // }
 
    const handleChange = (ev) => {
       const field = ev.target?.name
@@ -77,34 +72,37 @@ export const LeadPreview = ({ user, setIsEdit, lead }) => {
       console.log('field:', field)
       console.log('value:', value)
       const newLead = lead
-      newLead.status = value
-      setNewLead(newLead)
       switch (field) {
          case 'status':
-            console.log('test')
             setStatus(value)
+            newLead.status = value
+            break
+         case 'creator':
+            setCreator(value)
+            newLead.creator = value
             break
       }
-      console.log('lead:',lead)
+      setNewLead(newLead)
       onSaveLead()
    }
 
    const onSaveLead = async (ev) => {
       // ev.preventDefault()
       const leadToSave = {
-         fullname,
+         businessName,
+         managerName,
          phoneNumber,
+         phoneNumber2,
+         phoneNumber3,
+         role,
+         classDesc,
          createdAt: Date.now(),
-         // dishes,
-         // address,
+         address,
+         address2,
          message,
-         // estSupply,
-         // restaurantName: newLead.restaurantName,
-         // restaurantId: newLead.restaurantId,
-         // packageId: newLead.packageId,
          email,
-         status:lead.status,
-         // totalPrice,
+         creator: lead.creator,
+         status: lead.status,
       }
 
       if (newLead) leadToSave['_id'] = newLead._id
@@ -136,18 +134,26 @@ export const LeadPreview = ({ user, setIsEdit, lead }) => {
 
    return (
       <>
-         {/* <td className="package-id">
-         {modal && <PrinterModal toggleModal={toggleModal} modal={modal} lead={lead} user={user} getTime={getTime} zoneName={zoneName} />}
-            {lead.packageId}
-         </td> */}
-         {/* <td>
-            {lead.restaurantName}
-         </td> */}
-         {/* <td>
-            {lead.customerName}
-         </td> */}
+
          <td>
             {lead._id}
+         </td>
+
+         <td>
+            <div className="flex column">
+               <select onChange={handleChange} value={creator} name='creator'>
+                  {users.map((user, idx) => {
+                     return (
+                        <option key={idx} value={user.fullname}>
+                           {user.fullname}
+                        </option>)
+                  })}
+                  {!users.length && <option key={0} value={creator}>
+                     {creator}
+                  </option>}
+
+               </select>
+            </div>
          </td>
          <td>
             {getTime(lead.createdAt)}
@@ -156,8 +162,6 @@ export const LeadPreview = ({ user, setIsEdit, lead }) => {
             <form className='lead-edit-form flex' onSubmit={onSaveLead}>
                <div className="flex column">
                   <select onChange={handleChange} value={status} name='status'>
-                     {/* <option value="Not printed">{t('Not printed')}</option>
-                  <option value="Printed">{t('Printed')}</option> */}
                      <option value="New">{t('New')}</option>
                      <option value="New plus call">{t('New plus call')}</option>
                      <option value="No response">{t('No response')}</option>
@@ -183,46 +187,44 @@ export const LeadPreview = ({ user, setIsEdit, lead }) => {
             {/* {t(`${lead.status}`)} */}
          </td>
          <td>
-            {lead.fullname}
+            {lead.managerName}
+         </td>
+         <td>
+            {lead.businessName}
          </td>
          <td>
             {lead.phoneNumber}
          </td>
          <td>
+            {lead.phoneNumber2}
+         </td>
+         <td>
+            {lead.phoneNumber3}
+         </td>
+         <td>
+            {lead.classDesc}
+         </td>
+         <td>
+            {lead.role}
+         </td>
+         <td>
             {lead.email}
+         </td>
+         <td>
+            {lead.address}
+         </td>
+         <td>
+            {lead.address2}
          </td>
          <td>
             {lead.message}
          </td>
-         {/* <td>
-            {(zoneName) && <>
-               <span>{zoneName}</span>
-               <br />
-            </>}
-            {lead.address}
-         </td>
-         <td>
-            {lead.addressComments}
-         </td> */}
-         {/* <td>
-            {getTime(lead.estSupply)}
-         </td>
-         <td>
-            {lead.source}
-         </td>
-         <td>
-            {price}
-         </td> */}
 
-         {/* <td>
-            {lead.dishes}
-         </td> */}
          <td>
             <button onClick={async () => {
                await dispatch(setLead(lead._id))
                setIsEdit(true)
             }}>{t('Edit')}</button>
-            {/* <button onClick={() => onPrint()}>{t('Print')}</button> */}
             <button onClick={() => {
                dispatch(removeLead(lead._id))
             }}>{t('Delete')}</button>

@@ -55,6 +55,7 @@ async function getEmptyLead() {
       createdAt: now,
       fullname: '',
       status: 'New',
+      creator: user.fullname,
       // customerName: '',
       phoneNumber: '',
       message: '',

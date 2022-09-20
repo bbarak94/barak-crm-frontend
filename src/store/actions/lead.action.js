@@ -37,12 +37,9 @@ export function loadLeads(userId) {
     return async (dispatch) => {
         try {
             const leads = await leadService.query(userId)
-            console.log('test')
-            console.log(leads)
             dispatch(getActionSetLeads(leads))
             return leads
         } catch {
-            console.log('test')
             throw new Error('Could not load leads')
         }
     }
@@ -71,7 +68,6 @@ export function removeLead(leadId) {
 }
 
 export function saveLead(lead) {
-    console.log('lead:',lead)    
     return async (dispatch) => {
         const actionType = lead._id ? 'UPDATE_LEAD' : 'ADD_LEAD'
         try {

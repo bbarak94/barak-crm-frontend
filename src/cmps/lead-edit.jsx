@@ -10,38 +10,45 @@ import Autocomplete from "react-google-autocomplete";
 export const LeadEdit = ({ setIsEdit }) => {
    const dispatch = useDispatch()
    const { t, i18n } = useTranslation();
-
-   const { user } = useSelector((storeState) => storeState.userModule)
+   const { user, users } = useSelector((storeState) => storeState.userModule)
    var { lead } = useSelector((storeState) => storeState.leadModule)
 
    const [newLead, setNewLead] = useState()
    const [_id, set_id] = useState(lead?._id || '')
-   const [fullname, setFullname] = useState(lead?.fullname || '')
+   const [managerName, setManagerName] = useState(lead?.managerName || '')
+   const [businessName, setBusinessName] = useState(lead?.businessName || '')
    const [phoneNumber, setPhoneNumber] = useState(lead?.phoneNumber || '')
-   // const [address, setAddress] = useState(lead?.address || '')
+   const [phoneNumber2, setPhoneNumber2] = useState(lead?.phoneNumber2 || '')
+   const [phoneNumber3, setPhoneNumber3] = useState(lead?.phoneNumber3 || '')
+   const [classDesc, setClassDesc] = useState(lead?.classDesc || '')
+   const [address, setAddress] = useState(lead?.address || '')
+   const [address2, setAddress2] = useState(lead?.address2 || '')
+   const [role, setRole] = useState(lead?.role || '')
    const [message, setMessage] = useState(lead?.message || '')
    const [createdAt, setCreatedAt] = useState(lead?.createdAt || '')
-   // const [estSupply, setEstSupply] = useState(lead?.estSupply || '')
    const [email, setEmail] = useState(lead?.email || '')
-   // const [totalPrice, setTotalPrice] = useState(lead?.totalPrice || '')
-   // const [dishes, setDishes] = useState(lead?.dishes || '')
    const [status, setStatus] = useState(lead?.status || '')
+   const [creator, setCreator] = useState(lead?.creator || '')
 
    useEffect(() => {
       const getEmptyLead = async () => {
          const emptyLead = await leadService.getEmptyLead()
          setNewLead(emptyLead)
          set_id(emptyLead._id || '')
-         setFullname(emptyLead.fullname)
-         setPhoneNumber(emptyLead.phoneNumber)
-         // setAddress(emptyLead.address)
-         setMessage(emptyLead.message)
-         setCreatedAt(emptyLead.createdAt)
-         // setEstSupply(emptyLead.estSupply)
-         setEmail(emptyLead.email)
-         // setTotalPrice(emptyLead.totalPrice)
-         // setDishes(emptyLead.dishes)
-         setStatus(emptyLead.status)
+         setManagerName(emptyLead.managerName || '')
+         setBusinessName(emptyLead.businessName || '')
+         setPhoneNumber(emptyLead.phoneNumber || '')
+         setPhoneNumber2(emptyLead.phoneNumber2 || '')
+         setPhoneNumber3(emptyLead.phoneNumber3 || '')
+         setClassDesc(emptyLead.classDesc || '')
+         setAddress(emptyLead.address || '')
+         setAddress2(emptyLead.address2 || '')
+         setRole(emptyLead.role || '')
+         setMessage(emptyLead.message || '')
+         setCreatedAt(emptyLead.createdAt || Date.now())
+         setEmail(emptyLead.email || '')
+         setStatus(emptyLead.status || 'New')
+         setCreator(emptyLead.creator || 'Admin')
       }
 
       (!lead) ? getEmptyLead() : setNewLead(lead)
@@ -51,33 +58,44 @@ export const LeadEdit = ({ setIsEdit }) => {
       const field = ev.target?.name
       const value = ev.target?.value
       switch (field) {
-         case 'fullname':
-            setFullname(value)
+         case 'managerName':
+            setManagerName(value)
+            break
+         case 'businessName':
+            setBusinessName(value)
             break
          case 'phone_number':
             setPhoneNumber(value)
             break
-         // case 'address':
-         //    setAddress(value)
-         //    break
+         case 'phone_number2':
+            setPhoneNumber2(value)
+            break
+         case 'phone_number3':
+            setPhoneNumber3(value)
+            break
+         case 'classDesc':
+            setClassDesc(value)
+            break
+         case 'address':
+            setAddress(value)
+            break
+         case 'address2':
+            setAddress2(value)
+            break
+         case 'role':
+            setRole(value)
+            break
          case 'message':
             setMessage(value)
             break
-         // case 'estSupply':
-         //    const newEstSupply = getTimeStamp(value)
-         //    setEstSupply(newEstSupply)
-         //    break
          case 'email':
             setEmail(value)
             break
-         // case 'totalPrice':
-         //    setTotalPrice(value)
-         //    break
-         // case 'dishes':
-         //    setDishes(value)
-         //    break
          case 'status':
             setStatus(value)
+            break
+         case 'creator':
+            setCreator(value)
             break
       }
    }
@@ -85,19 +103,20 @@ export const LeadEdit = ({ setIsEdit }) => {
    const onSaveLead = async (ev) => {
       ev.preventDefault()
       const leadToSave = {
-         fullname,
+         managerName,
+         businessName,
          phoneNumber,
-         createdAt: Date.now(),
-         // dishes,
-         // address,
+         phoneNumber2,
+         phoneNumber3,
+         classDesc,
+         address,
+         address2,
+         role,
          message,
-         // estSupply,
-         // restaurantName: newLead.restaurantName,
-         // restaurantId: newLead.restaurantId,
-         // packageId: newLead.packageId,
+         createdAt: Date.now(),
          email,
          status,
-         // totalPrice,
+         creator
       }
 
       if (newLead) leadToSave['_id'] = newLead._id
@@ -131,11 +150,74 @@ export const LeadEdit = ({ setIsEdit }) => {
       <div className="edit-lead flex">
 
          <form className='lead-edit-form flex' onSubmit={onSaveLead}>
-         <div className="flex column">
+            <div className="flex column">
+               <p>{t('Creator')} </p>
+               <select onChange={handleChange} value={creator} name='creator'>
+                  {users.map((user, idx) => {
+                     return (
+                        <option key={idx} value={user.fullname}>
+                           {user.fullname}
+                        </option>)
+                  })}
+               </select>
+            </div>
+
+            <div className="flex column">
+               <p>{t('Business Name')} </p>
+               <input autoComplete='off' onChange={handleChange} autoFocus className='lead-input' value={businessName}
+                  placeholder={t('Business Name')} variant='filled' type='text' name='businessName' />
+            </div>
+            <div className="flex column">
+               <p>{t('Manager Name')} </p>
+               <input autoComplete='off' onChange={handleChange} autoFocus className='lead-input' value={managerName}
+                  placeholder={t('Manager Name')} variant='filled' type='text' name='managerName' />
+            </div>
+            <div className="flex column">
+               <p>{t('Phone Number')} </p>
+               <input autoComplete='off' onChange={handleChange} className='`lead`-input' value={phoneNumber}
+                  placeholder={t('Phone Number')} variant='filled' type='text' name='phone_number' />
+            </div>
+            <div className="flex column">
+               <p>{t('Phone Number2')} </p>
+               <input autoComplete='off' onChange={handleChange} className='`lead`-input' value={phoneNumber2}
+                  placeholder={t('Phone Number2')} variant='filled' type='text' name='phone_number2' />
+            </div>
+            <div className="flex column">
+               <p>{t('Phone Number3')} </p>
+               <input autoComplete='off' onChange={handleChange} className='`lead`-input' value={phoneNumber3}
+                  placeholder={t('Phone Number3')} variant='filled' type='text' name='phone_number3' />
+            </div>
+            <div className="flex column">
+               <p>{t('Class Desc')} </p>
+               <input autoComplete='off' onChange={handleChange} className='`lead`-input' value={classDesc}
+                  placeholder={t('Class Desc')} variant='filled' type='text' name='classDesc' />
+            </div>
+            <div className="flex column">
+               <p>{t('Address')} </p>
+               <input autoComplete='off' onChange={handleChange} className='`lead`-input' value={address}
+                  placeholder={t('Address')} variant='filled' type='text' name='address' />
+            </div>
+            <div className="flex column">
+               <p>{t('Address2')} </p>
+               <input autoComplete='off' onChange={handleChange} className='`lead`-input' value={address2}
+                  placeholder={t('Address2')} variant='filled' type='text' name='address2' />
+            </div>
+            <div className="flex column">
+               <p>{t('Role')} </p>
+               <input autoComplete='off' onChange={handleChange} className='`lead`-input' value={role}
+                  placeholder={t('Role')} variant='filled' type='text' name='role' />
+            </div>
+
+
+
+            <div className="flex column">
+               <p>{t('Email')} </p>
+               <input autoComplete='off' onChange={handleChange} className='lead-input' value={email}
+                  placeholder={t('Email')} variant='filled' type='text' name='email' />
+            </div>
+            <div className="flex column">
                <p>{t('Status')} </p>
                <select onChange={handleChange} value={status} name='status'>
-                  {/* <option value="Not printed">{t('Not printed')}</option>
-                  <option value="Printed">{t('Printed')}</option> */}
                   <option value="New">{t('New')}</option>
                   <option value="New plus call">{t('New plus call')}</option>
                   <option value="No response">{t('No response')}</option>
@@ -155,63 +237,11 @@ export const LeadEdit = ({ setIsEdit }) => {
                   <option value="Existing Customer">{t('Existing Customer')}</option>
                </select>
             </div>
-            <div className="flex column">
-               <p>{t('Fullname')} </p>
-               <input autoComplete='off' onChange={handleChange} autoFocus className='lead-input' value={fullname}
-                  placeholder={t('Fullname')} variant='filled' type='text' name='fullname' />
-            </div>
-            <div className="flex column">
-               <p>{t('Phone Number')} </p>
-               <input autoComplete='off' onChange={handleChange} className='`lead`-input' value={phoneNumber}
-                  placeholder={t('Phone Number')} variant='filled' type='text' name='phone_number' />
-            </div>
-            {/* <div className="flex column">
-               <p>{t('Address')} </p>
-               <Autocomplete
-                  placeholder={address}
-                  apiKey={'AIzaSyABgO4oUpqijXboPo2k0niWE_RERjLtsN0'}
-                  language="iw"
-                  options={{
-                     types: ["address"],
-                     fields: ["formatted_address"],
-                     componentRestrictions: { country: "il" },
-                  }}
-                  onPlaceSelected={(place) => {
-                     setAddress(place.formatted_address)
-                  }}
-               />
-            </div> */}
-            {/* <div className="flex column">
-               <p>{t('Estimate supply time')} </p>
-               <input autoComplete='off' onChange={handleChange} className='lead-input' value={getTime(estSupply)}
-                  placeholder={t('Estimate supply in minutes')} variant='filled' type='time' name='estSupply' />
-            </div> */}
-            <div className="flex column">
-               <p>{t('Email')} </p>
-               <input autoComplete='off' onChange={handleChange} className='lead-input' value={email}
-                  placeholder={t('Email')} variant='filled' type='text' name='email' />
-            </div>
-            {/* <div className="flex column">
-               <p>{t('Total price')} </p>
-               <input autoComplete='off' onChange={handleChange} className='lead-input' value={totalPrice}
-                  placeholder={t('Total price')} variant='filled' type='number' min={0} name='totalPrice' />
-            </div> */}
-            {/* <div className="flex column">
-               <p>{t('Dishes')} </p>
-               <input autoComplete='off' onChange={handleChange} className='lead-input' value={dishes}
-                  placeholder={t('Dishes')} variant='filled' type='text' name='dishes' />
-            </div> */}
-            {/* <div className="flex column message">
-               <p>{t('Message')} </p>
-               <input autoComplete='off' onChange={handleChange} className='lead-input' value={message}
-                  placeholder={t('Message')} variant='filled' type='text' name='message'/>
-            </div> */}
             <div className="flex column message">
                <p>{t('Message')} </p>
                <textarea min="2" rows="3" autoComplete='off' onChange={handleChange} className='lead-input' value={message}
                   placeholder={t('Message')} variant='filled' type='text' name='message'></textarea>
             </div>
-            
             <button className="save" onClick={onSaveLead}>{t('Save')}</button>
          </form>
          <button className="close-btn" onClick={async () => {

@@ -48,8 +48,8 @@ export function HomePage() {
       return (
             <section className='home-page flex column'>
                   <div className='main-text flex column align-center justify-center'>
-                        <h1 className='title1'>{t('Smart management for delivery leads')}</h1>
-                        <h2 className='title2'>{t('Beteabon is a decision support and management system for the delivery system in your restaurant,The system performs automation and customization for delivery leads')}</h2>
+                        <h1 className='title1'>{t('Smart tool for managing leads')}</h1>
+                        <h2 className='title2'>{t('Click-In CRM is a decision support and management system for you leading managing system in your business,The system performs automation and customization for managing leads')}</h2>
                         <button onClick={navLogin}>{t('Start Now')}</button>
                   </div>
                   {/* <InsightsApp totalSales={totalSales} totalClients={totalClients} totalLeads={totalLeads} /> */}

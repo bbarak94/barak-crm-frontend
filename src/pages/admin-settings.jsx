@@ -88,10 +88,10 @@ export const AdminSettings = () => {
                         <option value={true}>{t('Admin')}</option>
                      </select>
                   </div>
-                  <div className="flex align-center">
+                  {/* <div className="flex align-center">
                      <label>{t('API Key')}:</label>
                      <input className="input-api" autoComplete='off' onChange={handleEditChange} value={userToEdit.API_KEY} placeholder={t('Api key')} type='text' name='apiKey' />
-                  </div>
+                  </div> */}
                   <button onClick={saveUser}>{t('Save')}</button>
                </form>
             </section>

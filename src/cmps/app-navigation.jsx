@@ -66,6 +66,7 @@ export const AppNavigation = () => {
                         {(route.label === 'Leads') && <span><DeliveryDiningOutlinedIcon /></span>}
                         {/* {(route.label === 'Printers') && <span><LocalPrintshopOutlinedIcon /></span>} */}
                         {/* {(route.label === 'Zones') && <span><GpsFixedOutlinedIcon /></span>} */}
+                        {(route.label === 'Campaigns') && <span><GpsFixedOutlinedIcon /></span>}
                         {(route.label === 'Settings') && <span><SettingsOutlinedIcon /></span>}
                         {(route.label === 'Login') && <span><VpnKeyTwoToneIcon /></span>}
                         {(route.label === 'Signup') && <span><FaceTwoToneIcon /></span>}

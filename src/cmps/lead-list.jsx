@@ -8,6 +8,7 @@ import { loadLeads } from "../store/actions/lead.action.js";
 
 import { LeadPreview } from "./lead-preview"
 
+
 export const LeadList = ({ setIsEdit, leads }) => {
    const { t, i18n } = useTranslation();
    const { user } = useSelector((storeState) => storeState.userModule)
@@ -15,26 +16,28 @@ export const LeadList = ({ setIsEdit, leads }) => {
    useEffectUpdate(() => {
       loadLeads(user._id)
    }, [leads])
+
+
    return (
+
       <table className="lead-list">
          <thead className="lead-titles">
             <tr>
                <td>#</td>
-               {/* <td>{t('Restaurant')}</td> */}
+               <td>{t('Creator')}</td>
                <td>{t('Created at')}</td>
                <td>{t('Status')}</td>
-               <td>{t('Full Name')}</td>
+               <td>{t('Business Name')}</td>
+               <td>{t('Manager Name')}</td>
                <td>{t('Phone Number')}</td>
+               <td>{t('Phone Number2')}</td>
+               <td>{t('Phone Number3')}</td>
+               <td>{t('Class Desc')}</td>
+               <td>{t('Role')}</td>
                <td>{t('Email')}</td>
+               <td>{t('Address')}</td>
+               <td>{t('Address2')}</td>
                <td>{t('Message')}</td>
-               {/* <td>{t('Customer')}</td> */}
-               {/* <td>{t('Company')}</td> */}
-               {/* <td>{t('Address')}</td> */}
-               {/* <td>{t('Address comments')}</td> */}
-               {/* <td>{t('Estimate delivery')}</td> */}
-               {/* <td>{t('Source')}</td> */}
-               {/* <td>{t('Total price')}</td> */}
-               {/* <td>{t('Dishes')}</td> */}
                <td>{t('Actions')}</td>
             </tr>
          </thead>
@@ -47,5 +50,6 @@ export const LeadList = ({ setIsEdit, leads }) => {
             })}
          </tbody>
       </table>
+
    )
 }
