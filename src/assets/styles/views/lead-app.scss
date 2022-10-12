@@ -1,10 +1,53 @@
+
+
+    .lead-filter {
+        background-color: wheat!important;
+        margin: 20px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+
+        // flex-direction: column;
+        gap: 15px;
+        // margin: 0 !important;
+    }
+
+
 .lead-app {
+    padding-top: 160px !important;
+
+    .lead-table{
+        .pagination div{
+            // background-color: green;
+            // flex-direction: row-reverse!important;
+            justify-content: center!important;
+            p{
+                margin: 0;
+            }
+            .MuiTablePagination-actions{
+                display: flex;
+
+
+            }
+        }
+    }
 
     div {
         form {
-            input{
-                display: none;
+            .file{
+                :hover{
+                    cursor: pointer;
+                    color: white;
+                }
             }
+            .file {
+                input {
+                    display: none;
+                }
+            }
+
             .file {
                 width: unset;
                 border: 2px black solid;
@@ -13,7 +56,7 @@
                 padding: 5px 10px;
                 margin: 5px;
                 border-radius: 5px;
-                cursor: pointer;
+
             }
         }
     }

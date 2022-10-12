@@ -9,21 +9,56 @@ import { userService } from '../services/user.service'
 import { InsightsApp } from '../cmps/insights-app'
 import { LeadEdit } from '../cmps/lead-edit'
 import { LeadList } from '../cmps/lead-list'
+import { LeadTable } from '../cmps/lead-table'
+
+import { StatusesApp } from '../cmps/statuses-app.jsx'
+
+import { LeadsTablePagination } from '../cmps/leads-table-pagination';
 
 import * as XLSX from 'xlsx'
+import { loadStatuses } from '../store/actions/status.action';
+import { useEffectUpdate } from '../hooks/useEffectUpdate';
+import { LeadFilter } from '../cmps/lead-filter'
+
 
 export const LeadApp = () => {
    const navigation = useNavigate()
    const dispatch = useDispatch()
    const { t, i18n } = useTranslation();
    const { leads } = useSelector((storeState) => storeState.leadModule)
+   const { statuses } = useSelector((storeState) => storeState.statusModule)
+   const { filterBy } = useSelector((storeState) => storeState.leadModule)
+   const { users } = useSelector((storeState) => storeState.userModule)
+   const { campaigns } = useSelector((storeState) => storeState.campaignModule)
+
    const user = userService.getLoggedinUser()
+   const [leadsToShow, setLeadsToShow] = useState(leads)
+
 
    const [isEdit, setIsEdit] = useState(false)
+   const [isEditStatuses, setIsEditStatuses] = useState(false)
 
 
+   useEffectUpdate(() => {
+      loadLeads(user._id)
+      filterLeads()
+   }, [leads, filterBy])
 
+   useEffect(() => {
+      filterLeads()
+   }, [filterBy])
 
+   useEffect(() => {
+      loadLeads(user?._id)
+   }, [leads])
+
+   useEffectUpdate(() => {
+      loadLeads(user._id)
+   }, [leads])
+
+   const editStatuses = () => {
+      setIsEditStatuses(!isEditStatuses)
+   }
    const exportLeads = () => {
 
       const rows = {
@@ -88,10 +123,13 @@ export const LeadApp = () => {
          return
       }
       dispatch(loadLeads(user._id))
+      dispatch(loadStatuses(user._id))
    }, [])
 
    const onRefreshLeads = async () => {
       await dispatch(loadLeads(user._id))
+      await dispatch(loadStatuses(user._id))
+      navigation('/lead')
    }
 
 
@@ -107,7 +145,7 @@ export const LeadApp = () => {
       return `${time.toLocaleString()}`
    }
 
-   const readExcel = (file) => {
+   const readExcel = async (file) => {
       const prm = new Promise((resolve, reject) => {
          const fileReader = new FileReader()
          fileReader.readAsArrayBuffer(file)
@@ -129,6 +167,7 @@ export const LeadApp = () => {
       prm.then((d) => {
          // console.log(d)
       })
+      setIsEdit(false)
    }
 
    const addLeads = async (leads) => {
@@ -148,7 +187,7 @@ export const LeadApp = () => {
             createdAt: Date.now(),
             email: lead[(t('Email'))] || '',
             status: lead[(t('Status'))] || 'New',
-            creator: lead[(t('Creator'))] || '',
+            creator: lead[(t('Creator'))] || user.fullname,
          }
 
          dispatch((saveLead(leadToSave)))
@@ -156,7 +195,62 @@ export const LeadApp = () => {
    }
 
 
+   const filterLeads = () => {
+      if (user?._id) {
+         loadLeads(user._id)
+      }
+      let filtered = leads
+      if (filterBy.text) {
+         filtered = filtered.filter((lead, idx) => {
+            if ((lead.businessName + '')?.includes(filterBy.text) ||
+               (lead.managerName + '')?.includes(filterBy.text) ||
+               (lead.phoneNumber + '')?.includes(filterBy.text) ||
+               (lead.phoneNumber2 + '')?.includes(filterBy.text) ||
+               (lead.phoneNumber3 + '')?.includes(filterBy.text) ||
+               (lead.address + '')?.includes(filterBy.text) ||
+               (lead.address2 + '')?.includes(filterBy.text) ||
+               (lead.role + '')?.includes(filterBy.text) ||
+               (lead.message + '')?.includes(filterBy.text)
+            ) {
+               return lead
+            }
+         })
+      }
+      if (filterBy.status.length) {
+         filtered = filtered.filter((lead, idx) => {
+            if (filterBy.status.includes(t(lead.status))) return lead
+         })
+      }
+      if (filterBy.campaign.length) {
+         filtered = filtered.filter((lead, idx) => {
+            if (filterBy.campaign.includes(lead.campaign)) return lead
+         })
 
+      }
+      if (filterBy.channel.length) {
+         filtered = filtered.filter((lead, idx) => {
+            if (filterBy.channel.includes(lead.channel)) return lead
+         })
+
+      }
+      if (filterBy.date) {
+         filtered = filtered.filter((lead, idx) => {
+            var date = new Date(lead.createdAt);
+            var month = date.getMonth() + 1
+            if (month < 10) {
+               month = '0' + (month + 10)
+            }
+            var dateString = (date.getYear() + 1900) + '-' + +month + '-' + date.getDate()
+            if (dateString === filterBy.date) return lead
+         })
+      }
+      if (filterBy.creator.length) {
+         filtered = filtered.filter((lead, idx) => {
+            if (filterBy.creator.includes(lead.creator)) return lead
+         })
+      }
+      setLeadsToShow(filtered)
+   }
 
    if (!user) return (
       <section className='lead-app'>
@@ -164,33 +258,46 @@ export const LeadApp = () => {
       </section>
    )
 
-
+   // if(isEditStatuses) return (
+   //    <StatusesEdit />
+   // )
 
    else return (
       <section className='lead-app'>
+         <LeadFilter filterBy={filterBy} leads={leads} user={user} users={users} campaigns={campaigns} statuses={statuses} />
+
+         {isEditStatuses && <StatusesApp setIsEditStatuses={setIsEditStatuses} isEditStatuses={isEditStatuses} />}
          <div className='flex align-center space-between' style={{ gap: '10px', marginBottom: '5px' }}>
             <div className='flex align-center'>
-               <button className='exp-btn' onClick={() => exportLeads()}>{t('Export Leads')}</button>
+
+               <button className='exp-btn' onClick={() => editStatuses()}>{t('Edit Statuses')}</button>
+               <button className='add-btn' onClick={() => setIsEdit(true)}>{t('Add a single lead')}</button>
 
 
                <form>
                   <div className='file'>
-                     <label htmlFor='files' className="btn">{t('Import XLSX')}</label>
+                     <label htmlFor='files' className="btn">{t('Import multiple leads')}</label>
                      <input id="files" type="file" accept={".xlsx"} onChange={(e) => {
                         const file = e.target.files[0]
                         readExcel(file)
                      }} />
                   </div>
                </form>
-               <button className='add-btn' onClick={() => setIsEdit(true)}>{t('Add Lead')}</button>
-               <h1 className='title' style={{ margin: '0' }}>{t('Leads Count')}: {leads.length}</h1>
+               <button className='exp-btn' onClick={() => exportLeads()}>{t('Export Leads')}</button>
+
+               <h1 className='title' style={{ margin: '0' }}>{t('Total Leads')}: {leads.length}</h1>
+               <h1 className='title' style={{ margin: '0' }}>{t('Chosen')}: {leadsToShow.length}</h1>
             </div>
             <button className='refresh-btn' onClick={() => { onRefreshLeads() }}>{t('Refresh')}</button>
          </div>
          {(isEdit) && <LeadEdit setIsEdit={setIsEdit} />}
+         {/* <LeadsTablePagination leads={leads} /> */}
+
          <div className='lead-table'>
-            <LeadList setIsEdit={setIsEdit} leads={leads} />
+            <LeadTable leadsToShow={leadsToShow} leads={leads} setIsEdit={setIsEdit} filterBy={filterBy} />
+            {/* <LeadList setIsEdit={setIsEdit} leads={leads} filterBy={filterBy} /> */}
          </div>
+
       </section>
    )
 

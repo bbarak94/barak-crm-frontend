@@ -10,13 +10,11 @@ export const PrinterModal = ({ toggleModal, modal, user, lead, getTime, zoneName
    useEffect(() => {
       var printers = [...printedTo]
       user.activePrinters.map((printer) => {
-         console.log('printer:', printer)
          if (printer.isSelected) {
             printers.push(printer.customName)
          }
       })
       setPrintedTo(printers)
-      console.log('printedTo:', printedTo)
 
    }, [])
 

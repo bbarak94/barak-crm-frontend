@@ -12,13 +12,12 @@ import { ChannelPreview } from "./channel-preview.jsx"
 import { ChannelEdit } from "./channel-edit.jsx"
 
 
-export const ChannelList = ({ channels }) => {
+export const ChannelList = ({ isEditCampaign, setIsEditCampaign, isEditChannel, setIsEditChannel, channels }) => {
    const { t, i18n } = useTranslation();
    const { user } = useSelector((storeState) => storeState.userModule)
    const dispatch = useDispatch()
    const navigation = useNavigate()
    
-   const [isEdit, setIsEdit] = useState(false)
 
    useEffect(() => {
       if (!user) {
@@ -40,20 +39,22 @@ export const ChannelList = ({ channels }) => {
 
          <div className='flex align-center space-between' style={{ gap: '10px', marginBottom: '5px' }}>
             <div className='flex align-center'>
-               <button className='add-btn' onClick={() => setIsEdit(true)}>{t('Add Channel')}</button>
+               <button className='add-btn' onClick={() => setIsEditChannel(true)}>{t('Add Channel')}</button>
                <h1 className='title' style={{ margin: '0' }}>{t('Channels Count')}: {channels?.length | 0}</h1>
             </div>
             <button className='refresh-btn' onClick={() => { onRefreshChannels() }}>{t('Refresh')}</button>
          </div>
-         {/* {(isEdit) && <ChannelEdit setIsEdit={setIsEdit} isEdit={isEdit}  />} */}
-         {/* <div className='channel-table'>
-            <ChannelList setIsEdit={setIsEdit} channels={channels} />
-         </div> */
-         }
-         {/* {(isEdit) && <div className='channel-table'>
-            <ChannelList setIsEdit={setIsEdit} channels={channels} />
+
+
+         {/* {(isEditCampaign) && <ChannelEdit setIsEditCampaign={setIsEditCampaign} isEditCampaign={isEditCampaign}  />}
+         <div className='channel-table'>
+            <ChannelList setIsEditCampaign={setIsEditCampaign} channels={channels} />
+         </div>  */}
+         
+       {/* {(isEditCampaign) && <div className='channel-table'>
+            <ChannelList setIsEditCampaign={setIsEditCampaign} channels={channels} />
          </div>
-         } */}
+         }  */}
 
 
          <table className="channel-list">
@@ -62,7 +63,6 @@ export const ChannelList = ({ channels }) => {
                   <td>#</td>
                   <td>{t('Channel')}</td>
                   <td>{t('Channel created at')}</td>
-
                   <td>{t('Channel Manager')}</td>
                   <td>{t('Permissions')}</td>
                   <td>{t('Actions')}</td>
@@ -72,7 +72,7 @@ export const ChannelList = ({ channels }) => {
                {channels?.map((channel, idx) => {
                   return (
                      <tr key={idx}>
-                        <ChannelPreview channel={channel} user={user} />
+                        <ChannelPreview setIsEditChannel={setIsEditChannel} channel={channel} user={user} />
                      </tr>)
                })}
             </tbody>

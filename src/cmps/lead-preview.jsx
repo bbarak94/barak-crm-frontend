@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { useTranslation } from 'react-i18next';
 import { leadService } from "../services/lead.service"
 
+
 import { removeLead, setLead, saveLead, loadLeads, getActionSetLead } from "../store/actions/lead.action"
 
 export const LeadPreview = ({ user, setIsEdit, lead }) => {
@@ -10,7 +11,6 @@ export const LeadPreview = ({ user, setIsEdit, lead }) => {
    const { t, i18n } = useTranslation();
    const { users } = useSelector((storeState) => storeState.userModule)
 
-   // const [zoneName, setZoneName] = useState('')
    const [newLead, setNewLead] = useState()
    const [modal, setModal] = useState(false);
    const [_id, set_id] = useState(lead?._id || '')
@@ -69,25 +69,24 @@ export const LeadPreview = ({ user, setIsEdit, lead }) => {
    const handleChange = (ev) => {
       const field = ev.target?.name
       const value = ev.target?.value
-      console.log('field:', field)
-      console.log('value:', value)
-      const newLead = lead
+      const x = { ...lead }
       switch (field) {
          case 'status':
             setStatus(value)
-            newLead.status = value
+            x.status = value
             break
          case 'creator':
             setCreator(value)
-            newLead.creator = value
+            x.creator = value
             break
       }
-      setNewLead(newLead)
-      onSaveLead()
+      setNewLead(x)
+      onSaveLead(x)
    }
 
-   const onSaveLead = async (ev) => {
+   const onSaveLead = async (x = '') => {
       // ev.preventDefault()
+
       const leadToSave = {
          businessName,
          managerName,
@@ -105,9 +104,14 @@ export const LeadPreview = ({ user, setIsEdit, lead }) => {
          status: lead.status,
       }
 
-      if (newLead) leadToSave['_id'] = newLead._id
-      console.log('leadToSave:', leadToSave)
-      await dispatch((saveLead(leadToSave)))
+      if (x) {
+         // leadToSave['_id'] = x._id
+         leadToSave._id = x._id
+         leadToSave.status = x.status
+         leadToSave.creator = x.creator
+      }
+      // await dispatch((saveLead(leadToSave)))
+      await dispatch((saveLead(x)))
       await dispatch(loadLeads(user._id))
       await dispatch(getActionSetLead(null))
       setIsEdit(false)
@@ -136,12 +140,12 @@ export const LeadPreview = ({ user, setIsEdit, lead }) => {
       <>
 
          <td>
-            {lead._id}
+            {lead?._id}
          </td>
 
          <td>
             <div className="flex column">
-               <select onChange={handleChange} value={creator} name='creator'>
+               <select onChange={handleChange} value={lead.creator} name='creator'>
                   {users.map((user, idx) => {
                      return (
                         <option key={idx} value={user.fullname}>
@@ -156,12 +160,12 @@ export const LeadPreview = ({ user, setIsEdit, lead }) => {
             </div>
          </td>
          <td>
-            {getTime(lead.createdAt)}
+            {getTime(lead?.createdAt)}
          </td>
          <td>
             <form className='lead-edit-form flex' onSubmit={onSaveLead}>
                <div className="flex column">
-                  <select onChange={handleChange} value={status} name='status'>
+                  <select onChange={handleChange} value={lead.status} name='status'>
                      <option value="New">{t('New')}</option>
                      <option value="New plus call">{t('New plus call')}</option>
                      <option value="No response">{t('No response')}</option>
@@ -187,37 +191,43 @@ export const LeadPreview = ({ user, setIsEdit, lead }) => {
             {/* {t(`${lead.status}`)} */}
          </td>
          <td>
-            {lead.managerName}
+            {lead?.campaign}
          </td>
          <td>
-            {lead.businessName}
+            {lead?.channel}
          </td>
          <td>
-            {lead.phoneNumber}
+            {lead?.managerName}
          </td>
          <td>
-            {lead.phoneNumber2}
+            {lead?.businessName}
          </td>
          <td>
-            {lead.phoneNumber3}
+            {lead?.phoneNumber}
          </td>
          <td>
-            {lead.classDesc}
+            {lead?.phoneNumber2}
          </td>
          <td>
-            {lead.role}
+            {lead?.phoneNumber3}
          </td>
          <td>
-            {lead.email}
+            {lead?.classDesc}
          </td>
          <td>
-            {lead.address}
+            {lead?.role}
          </td>
          <td>
-            {lead.address2}
+            {lead?.email}
          </td>
          <td>
-            {lead.message}
+            {lead?.address}
+         </td>
+         <td>
+            {lead?.address2}
+         </td>
+         <td>
+            {lead?.message}
          </td>
 
          <td>

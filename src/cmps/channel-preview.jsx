@@ -5,7 +5,7 @@ import { channelService } from "../services/channel.service"
 
 import { removeChannel, setChannel, saveChannel, loadChannels, getActionSetChannel } from "../store/actions/channel.action"
 
-export const ChannelPreview = ({ user, setIsEdit, channel }) => {
+export const ChannelPreview = ({ user, setIsEditChannel, channel }) => {
    const dispatch = useDispatch()
    const { t, i18n } = useTranslation();
    const { users } = useSelector((storeState) => storeState.userModule)
@@ -25,17 +25,11 @@ export const ChannelPreview = ({ user, setIsEdit, channel }) => {
          const emptyChannel = await channelService.getEmptyChannel()
          setNewChannel(emptyChannel)
          set_id(emptyChannel._id || '')
-         // setAddress(emptyChannel.address)
          setCreatedAt(emptyChannel.createdAt)
-         // setEstSupply(emptyChannel.estSupply)
          setChannelManager(emptyChannel.channelManager)
-         // setTotalPrice(emptyChannel.totalPrice)
-         // setDishes(emptyChannel.dishes)
       }
 
       (!channel) ? getEmptyChannel() : setNewChannel(channel)
-      // setNewChannel(emptyChannel)
-      // setZone()
    }, [])
 
    const toggleModal = () => {
@@ -48,13 +42,6 @@ export const ChannelPreview = ({ user, setIsEdit, channel }) => {
       document.body.classList.remove('active-modal')
    }
 
-   // const onPrint = async () => {
-   //    toggleModal()
-   //    const newChannel = { ...channel }
-   //    newChannel.status = 'Printed'
-   //    await dispatch((saveChannel(newChannel)))
-   // }
-
    const handleChange = (ev) => {
       const field = ev.target?.name
       const value = ev.target?.value
@@ -64,8 +51,8 @@ export const ChannelPreview = ({ user, setIsEdit, channel }) => {
             setPermissions(value)
             newChannel.permissions = value
             break
-            case 'channelManager':
-               setChannelManager(value)
+         case 'channelManager':
+            setChannelManager(value)
             newChannel.channelManager = value
             break
       }
@@ -74,27 +61,18 @@ export const ChannelPreview = ({ user, setIsEdit, channel }) => {
    }
 
    const onSaveChannel = async (ev) => {
-      // ev.preventDefault()
       const channelToSave = {
          createdAt: Date.now(),
-         // dishes,
-         // address,
          message,
-         // estSupply,
-         // restaurantName: newChannel.restaurantName,
-         // restaurantId: newChannel.restaurantId,
-         // packageId: newChannel.packageId,
          creator: channel.creator,
          permissions: channel.permissions,
-         // totalPrice,
       }
 
       if (newChannel) channelToSave['_id'] = newChannel._id
-      console.log('channelToSave:', channelToSave)
       await dispatch((saveChannel(channelToSave)))
       await dispatch(loadChannels(user._id))
       await dispatch(getActionSetChannel(null))
-      setIsEdit(false)
+      setIsEditChannel(false)
    }
 
 
@@ -106,7 +84,6 @@ export const ChannelPreview = ({ user, setIsEdit, channel }) => {
       minute = ('0' + minute).slice(-2);
       const timeToShow = time.getDate()
 
-      // return `${hour}:${minute}`
       return `${time.toLocaleString()}`
    }
 
@@ -118,16 +95,7 @@ export const ChannelPreview = ({ user, setIsEdit, channel }) => {
 
    return (
       <>
-         {/* <td className="package-id">
-         {modal && <PrinterModal toggleModal={toggleModal} modal={modal} channel={channel} user={user} getTime={getTime} zoneName={zoneName} />}
-            {channel.packageId}
-         </td> */}
-         {/* <td>
-            {channel.restaurantName}
-         </td> */}
-         {/* <td>
-            {channel.customerName}
-         </td> */}
+
          <td>
             {channel._id}
          </td>
@@ -154,47 +122,17 @@ export const ChannelPreview = ({ user, setIsEdit, channel }) => {
             <form className='channel-edit-form flex' onSubmit={onSaveChannel}>
                <div className="flex column">
                   <select onChange={handleChange} value={permissions} name='permissions'>
-                     {/* <option value="Not printed">{t('Not printed')}</option>
-                  <option value="Printed">{t('Printed')}</option> */}
                      <option value="">{t('Public')}</option>
                      <option value="Admin">{t('Admin only')}</option>
                   </select>
                </div>
             </form>
-
-
-            {/* {t(`${channel.status}`)} */}
          </td>
-
-         {/* <td>
-            {(zoneName) && <>
-               <span>{zoneName}</span>
-               <br />
-            </>}
-            {channel.address}
-         </td>
-         <td>
-            {channel.addressComments}
-         </td> */}
-         {/* <td>
-            {getTime(channel.estSupply)}
-         </td>
-         <td>
-            {channel.source}
-         </td>
-         <td>
-            {price}
-         </td> */}
-
-         {/* <td>
-            {channel.dishes}
-         </td> */}
          <td>
             <button onClick={async () => {
                await dispatch(setChannel(channel._id))
-               setIsEdit(true)
+               setIsEditChannel(true)
             }}>{t('Edit')}</button>
-            {/* <button onClick={() => onPrint()}>{t('Print')}</button> */}
             <button onClick={() => {
                dispatch(removeChannel(channel._id))
             }}>{t('Delete')}</button>

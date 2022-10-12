@@ -1,6 +1,6 @@
 import { HomePage } from './pages/home-page'
 import { LeadApp } from './pages/lead-app'
-import { PrinterApp } from './pages/printer-app'
+// import { PrinterApp } from './pages/printer-app'
 import { ZoneApp } from './pages/zone-app'
 import { SettingsApp } from './pages/settings-app'
 import { LoginSignup } from './pages/login-signup'

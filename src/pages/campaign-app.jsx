@@ -15,7 +15,8 @@ export const CampaignApp = () => {
    const navigation = useNavigate()
    const dispatch = useDispatch()
    const { t, i18n } = useTranslation();
-   const [isEdit, setIsEdit] = useState(false)
+   const [isEditCampaign, setIsEditCampaign] = useState(false)
+   const [isEditChannel, setIsEditChannel] = useState(false)
 
    const { campaigns, campaign } = useSelector((storeState) => storeState.campaignModule)
 
@@ -30,7 +31,6 @@ export const CampaignApp = () => {
 
    const onRefreshCampaigns = async () => {
       await dispatch(loadCampaigns(user._id))
-      console.log('campaign',campaign.channels)
 
    }
    if (!user) return (
@@ -42,19 +42,19 @@ export const CampaignApp = () => {
 
    else return (
       <section className='campaign-app'>
-         {(isEdit) && <CampaignEdit setIsEdit={setIsEdit} />}
-         {(isEdit) && <ChannelEdit setIsEdit={setIsEdit} channels={campaign?.channels} />}
+         {(isEditCampaign) && <CampaignEdit setIsEditCampaign={setIsEditCampaign} />}
          <div className='flex align-center space-between' style={{ gap: '10px', marginBottom: '5px' }}>
             <div className='flex align-center'>
-               <button className='add-btn' onClick={() => setIsEdit(true)}>{t('Add Campaign')}</button>
+               <button className='add-btn' onClick={() => setIsEditCampaign(true)}>{t('Add Campaign')}</button>
                <h1 className='title' style={{ margin: '0' }}>{t('Campaigns Count')}: {campaigns.length}</h1>
             </div>
             <button className='refresh-btn' onClick={() => { onRefreshCampaigns() }}>{t('Refresh')}</button>
          </div>
          <div className='campaign-table'>
-            <CampaignList setIsEdit={setIsEdit} campaigns={campaigns} />
+            <CampaignList setIsEditCampaign={setIsEditCampaign} campaigns={campaigns} />
          </div>
-         {(isEdit) && <ChannelList setIsEdit={setIsEdit} channels={campaign?.channels} />}
+         {(isEditChannel) && <ChannelEdit setIsEditCampaign={setIsEditCampaign} channels={campaign?.channels} />}
+         {(isEditCampaign) && <ChannelList setIsEditChannel={setIsEditChannel} setIsEditCampaign={setIsEditCampaign} channels={campaign?.channels} />}
 
 
 

@@ -3,10 +3,10 @@
    padding: 0;
    outline: 0;
    appearance: none;
-   blead: 0;
+   border: 0;
    text-decoration: none;
    list-style: none;
-   box-sizing: blead-box;
+   box-sizing: border-box;
 }
 
 ::selection {
@@ -38,7 +38,8 @@ body {
 
 main {
    display: grid;
-   grid-template-columns: 18rem auto;
+   // grid-template-columns: 18rem auto;
+   grid-template-columns: auto;
    max-height: 100vh;
    overflow-y: auto;
 }

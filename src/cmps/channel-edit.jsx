@@ -6,12 +6,15 @@ import { useTranslation } from 'react-i18next'
 import { channelService } from "../services/channel.service"
 import { saveChannel, loadChannels, getActionSetChannel } from "../store/actions/channel.action"
 import { saveCampaign, loadCampaigns, getActionSetCampaign } from "../store/actions/campaign.action"
+import { saveLead } from '../store/actions/lead.action'
 
 import { userService } from "../services/user.service"
-import { ChannelPreview } from "./channel-preview"
 import { ChannelList } from "./channel-list"
 
-export const ChannelEdit = ({ channel, setIsEdit, isEdit }) => {
+import * as XLSX from 'xlsx'
+
+
+export const ChannelEdit = ({ channel,setIsEditChannel, setIsEditCampaign, isEditCampaign }) => {
    const dispatch = useDispatch()
    const { t, i18n } = useTranslation();
 
@@ -69,7 +72,7 @@ export const ChannelEdit = ({ channel, setIsEdit, isEdit }) => {
       await dispatch((saveCampaign(campaignToSave)))
       await dispatch(loadChannels(user._id))
       await dispatch(getActionSetChannel(null))
-      setIsEdit(false)
+      setIsEditChannel(false)
    }
 
    const getTime = (timeStamp) => {
@@ -88,6 +91,55 @@ export const ChannelEdit = ({ channel, setIsEdit, isEdit }) => {
       timeStamp.setMinutes(timeStr.substring(3, 5))
       timeStamp.setSeconds(timeStr.substring(6))
       return +timeStamp
+   }
+
+   const readExcel = (file) => {
+      const prm = new Promise((resolve, reject) => {
+         const fileReader = new FileReader()
+         fileReader.readAsArrayBuffer(file)
+
+         fileReader.onload = (e) => {
+            const bufferArray = e.target.result
+            const wb = XLSX.read(bufferArray, { type: 'buffer' })
+            const wsname = wb.SheetNames[0]
+            const ws = wb.Sheets[wsname]
+            const data = XLSX.utils.sheet_to_json(ws)
+            addLeads(data)
+            resolve(data)
+         }
+         fileReader.onerror = ((err) => {
+            reject(err)
+         }
+         )
+      })
+      prm.then((d) => {
+         // console.log(d)
+      })
+   }
+
+   const addLeads = async (leads) => {
+
+      leads.forEach((lead, idx) => {
+         const leadToSave = {
+            managerName: lead[(t('Manager Name'))] || '',
+            businessName: lead[(t('Business Name'))] || '',
+            phoneNumber: lead[(t('Phone Number'))] || '',
+            phoneNumber2: lead[(t('Phone Number2'))] || '',
+            phoneNumber3: lead[(t('Phone Number3'))] || '',
+            classDesc: lead[(t('Class Desc'))] || '',
+            address: lead[(t('Address'))] || '',
+            address2: lead[(t('Address2'))] || '',
+            role: lead[(t('Role'))] || '',
+            message: lead[(t('Message'))] || '',
+            createdAt: Date.now(),
+            email: lead[(t('Email'))] || '',
+            status: lead[(t('Status'))] || 'New',
+            creator: lead[(t('Creator'))] || user.fullname,
+            channel: channelName,
+         }
+
+         dispatch((saveLead(leadToSave)))
+      })
    }
 
    if (!newChannel) return <h1>Loading...</h1>
@@ -114,21 +166,30 @@ export const ChannelEdit = ({ channel, setIsEdit, isEdit }) => {
             })}
                </select>
             </div>
+            <form>
+                  <div className='file'>
+                     <label htmlFor='files' className="btn">{t('Import XLSX')}</label>
+                     <input id="files" type="file" accept={".xlsx"} onChange={(e) => {
+                        const file = e.target.files[0]
+                        readExcel(file)
+                     }} />
+                  </div>
+               </form>
 
-            <div className="flex column Message">
+            {/* <div className="flex column Message">
                <p>{t('Message')} </p>
                <textarea min="2" rows="3" autoComplete='off' onChange={handleChange} className='channel-input' value={message}
                   placeholder={t('Message')} variant='filled' type='text' name='message'></textarea>
-            </div>
+            </div> */}
 
             <button className="save" onClick={onSaveChannel}>{t('Save')}</button>
          </form>
          <button className="close-btn" onClick={async () => {
             await dispatch(getActionSetChannel(null))
-            setIsEdit(false)
+            setIsEditCampaign(false)
          }
          }
          >x</button>
-         {(isEdit) && <ChannelList setIsEdit={setIsEdit} isEdit={isEdit}  />}
+         {(isEditCampaign) && <ChannelList setIsEditCampaign={setIsEditCampaign} isEditCampaign={isEditCampaign}  />}
       </div>)
 }

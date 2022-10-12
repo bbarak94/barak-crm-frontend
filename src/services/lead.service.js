@@ -49,21 +49,14 @@ async function getEmptyLead() {
    var now = new Date(Date.now())
    // var est = new Date(Date.now())
    const newLead = {
-      // restaurantName: user.fullname,
-      // restaurantId: user._id,
-      // packageId: utilService.makeNum(),
       createdAt: now,
       fullname: '',
       status: 'New',
       creator: user.fullname,
-      // customerName: '',
       phoneNumber: '',
       message: '',
-      // addressComments: '',
-      // estSupply: est.setMinutes(now.getMinutes() + 20),
-      // source: '',
-      // totalPrice: '',
-      // dishes: []
+      address: '',
+      address2: ''
    }
    return newLead
 }

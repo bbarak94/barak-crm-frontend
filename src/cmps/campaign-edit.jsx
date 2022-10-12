@@ -5,10 +5,8 @@ import { useTranslation } from 'react-i18next'
 import { campaignService } from "../services/campaign.service"
 import { saveCampaign, loadCampaigns, getActionSetCampaign } from "../store/actions/campaign.action"
 
-import Autocomplete from "react-google-autocomplete";
-import { userService } from "../services/user.service"
 
-export const CampaignEdit = ({ setIsEdit }) => {
+export const CampaignEdit = ({ setIsEditCampaign }) => {
    const dispatch = useDispatch()
    const { t, i18n } = useTranslation();
 
@@ -18,7 +16,7 @@ export const CampaignEdit = ({ setIsEdit }) => {
    const [newCampaign, setNewCampaign] = useState()
    const [_id, set_id] = useState(campaign?._id || '')
    const [campaignName, setCampaignName] = useState(campaign?.campaignName || '')
-   const [campaignManager, setCampaignManager] = useState(campaign?.campaignManager || '')
+   const [campaignManager, setCampaignManager] = useState(campaign?.campaignManager || user.fullname)
    const [createdAt, setCreatedAt] = useState(campaign?.createdAt || '')
    const [message, setMessage] = useState(campaign?.message || '')
    const [channels, setChannels] = useState(campaign?.channels || [])
@@ -29,7 +27,7 @@ export const CampaignEdit = ({ setIsEdit }) => {
          setNewCampaign(emptyCampaign)
          set_id(emptyCampaign._id || '')
          setCampaignName(emptyCampaign.campaignName)
-         setCampaignManager(emptyCampaign.campaignManager)
+         setCampaignManager(user.fullname)
          setMessage(emptyCampaign.campignManager)
          setCreatedAt(emptyCampaign.createdAt)
       }
@@ -67,7 +65,7 @@ export const CampaignEdit = ({ setIsEdit }) => {
       await dispatch((saveCampaign(campaignToSave)))
       await dispatch(loadCampaigns(user._id))
       await dispatch(getActionSetCampaign(null))
-      setIsEdit(false)
+      setIsEditCampaign(false)
    }
 
    const getTime = (timeStamp) => {
@@ -123,7 +121,7 @@ export const CampaignEdit = ({ setIsEdit }) => {
          </form>
          <button className="close-btn" onClick={async () => {
             await dispatch(getActionSetCampaign(null))
-            setIsEdit(false)
+            setIsEditCampaign(false)
          }
          }
          >x</button>

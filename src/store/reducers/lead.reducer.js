@@ -3,6 +3,14 @@ import { leadService } from "../../services/lead.service"
 const initialState = {
    leads: leadService.getAllLeads(),
    lead: null,
+   filterBy:{
+      date: '',
+      text: '',
+      status: [],
+      creator: [],
+      campaign: [],
+      channel: []
+   }
 }
 
 
@@ -16,7 +24,11 @@ export function leadReducer(state = initialState, action) {
       case 'SET_LEAD':
          newState = { ...state, lead: action.lead }
          break
-      case 'REMOVE_LEAD':
+      case 'SET_FILTER_BY':
+         console.log('setFilterBy')
+         newState = { ...state, filterBy: {...action.filterBy} }
+         break
+      case 'REAMOVE_LEAD':
          const lastRemovedLead = state.leads.find(
             (lead) => lead._id === action.leadId
          )
@@ -25,7 +37,7 @@ export function leadReducer(state = initialState, action) {
          )
          newState = { ...state, leads, lastRemovedLead }
          break
-      // case 'SAVE_LEAD':
+      // case 'SAVE_STATUS':
       //    newState = { ...state, lead: action.lead }
       //    break
       case 'ADD_LEAD':

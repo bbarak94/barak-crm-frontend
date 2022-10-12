@@ -13,6 +13,12 @@ export function getActionSetLead(lead) {
         lead,
     }
 }
+export function getActionSetFilterBy(filterBy) {
+    return {
+        type: 'SET_FILTER_BY',
+        filterBy,
+    }
+}
 export function getActionRemoveLead(leadId) {
     return {
         type: 'REMOVE_LEAD',
@@ -69,7 +75,9 @@ export function removeLead(leadId) {
 
 export function saveLead(lead) {
     return async (dispatch) => {
-        const actionType = lead._id ? 'UPDATE_LEAD' : 'ADD_LEAD'
+        const actionType = lead?._id ? 'UPDATE_LEAD' : 'ADD_LEAD'
+        console.log('lead:',lead)        
+        console.log('actionType:',actionType)        
         try {
             dispatch({ type: actionType, lead })
             const savedLead = await leadService.save(lead)
@@ -80,11 +88,22 @@ export function saveLead(lead) {
     }
 }
 
+
 export function setLead(leadId) {
     return async (dispatch) => {
         try {
             const lead = await leadService.getById(leadId)
             dispatch(getActionSetLead(lead))
+        } catch (err) {
+            console.log('Cannot set lead', err)
+        }
+    }
+}
+
+export function setFilterBy(filterBy) {
+    return async (dispatch) => {
+        try {
+            dispatch(getActionSetFilterBy(filterBy))
         } catch (err) {
             console.log('Cannot set lead', err)
         }

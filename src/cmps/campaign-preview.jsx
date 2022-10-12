@@ -5,10 +5,9 @@ import { campaignService } from "../services/campaign.service"
 
 import { removeCampaign, setCampaign, saveCampaign, loadCampaigns, getActionSetCampaign } from "../store/actions/campaign.action"
 
-import { PrinterModal } from './printer-modal'
 
 
-export const CampaignPreview = ({ user, setIsEdit, campaign }) => {
+export const CampaignPreview = ({ user, setIsEditCampaign, campaign }) => {
    const dispatch = useDispatch()
    const { t, i18n } = useTranslation();
 
@@ -29,19 +28,11 @@ export const CampaignPreview = ({ user, setIsEdit, campaign }) => {
          set_id(emptyCampaign._id || '')
          setCampaignName(emptyCampaign.campaignName)
          setCampaignManager(emptyCampaign.campaignManager)
-         // setPhoneNumber(emptyCampaign.phoneNumber)
-         // setAddress(emptyCampaign.address)
-         // setMessage(emptyCampaign.message)
          setCreatedAt(emptyCampaign.createdAt)
-         // setEstSupply(emptyCampaign.estSupply)
-         // setTotalPrice(emptyCampaign.totalPrice)
-         // setDishes(emptyCampaign.dishes)
-         // setStatus(emptyCampaign.status)
       }
 
       (!campaign) ? getEmptyCampaign() : setNewCampaign(campaign)
       // setNewCampaign(emptyCampaign)
-      // setZone()
    }, [])
 
    const toggleModal = () => {
@@ -54,26 +45,9 @@ export const CampaignPreview = ({ user, setIsEdit, campaign }) => {
       document.body.classList.remove('active-modal')
    }
 
-   // const onPrint = async () => {
-   //    toggleModal()
-   //    const newCampaign = { ...campaign }
-   //    newCampaign.status = 'Printed'
-   //    await dispatch((saveCampaign(newCampaign)))
-   // }
-
-   // const setZone = (ev) => {
-   //    user.zones.map((zone, idx) => {
-   //       zone.streets.map((street) => {
-   //          if (campaign.address.includes(zone.city) && campaign.address.includes(street)) setZoneName(zone.name)
-   //       })
-   //    })
-   // }
-
    const handleChange = (ev) => {
       const field = ev.target?.name
       const value = ev.target?.value
-      console.log('field:', field)
-      console.log('value:', value)
       const newCampaign = campaign
       newCampaign.status = value
       setNewCampaign(newCampaign)
@@ -94,28 +68,17 @@ export const CampaignPreview = ({ user, setIsEdit, campaign }) => {
    const onSaveCampaign = async (ev) => {
       // ev.preventDefault()
       const campaignToSave = {
-         // fullname,
-         // phoneNumber,
          campaignName,
          campaignManager,
          createdAt: Date.now(),
-         // dishes,
-         // address,
-         // message,
-         // estSupply,
-         // restaurantName: newCampaign.restaurantName,
-         // restaurantId: newCampaign.restaurantId,
-         // packageId: newCampaign.packageId,
          status:campaign.message
-         // totalPrice,
       }
 
       if (newCampaign) campaignToSave['_id'] = newCampaign._id
-      console.log('campaignToSave:', campaignToSave)
       await dispatch((saveCampaign(campaignToSave)))
       await dispatch(loadCampaigns(user._id))
       await dispatch(getActionSetCampaign(null))
-      setIsEdit(false)
+      setIsEditCampaign(false)
    }
 
 
@@ -127,7 +90,6 @@ export const CampaignPreview = ({ user, setIsEdit, campaign }) => {
       minute = ('0' + minute).slice(-2);
       const timeToShow = time.getDate()
 
-      // return `${hour}:${minute}`
       return `${time.toLocaleString()}`
    }
 
@@ -163,9 +125,8 @@ export const CampaignPreview = ({ user, setIsEdit, campaign }) => {
          <td>
             <button onClick={async () => {
                await dispatch(setCampaign(campaign._id))
-               setIsEdit(true)
+               setIsEditCampaign(true)
             }}>{t('Edit')}</button>
-            {/* <button onClick={() => onPrint()}>{t('Print')}</button> */}
             <button onClick={() => {
                dispatch(removeCampaign(campaign._id))
             }}>{t('Delete')}</button>

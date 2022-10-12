@@ -29,8 +29,14 @@ export const LeadEdit = ({ setIsEdit }) => {
    const [email, setEmail] = useState(lead?.email || '')
    const [status, setStatus] = useState(lead?.status || '')
    const [creator, setCreator] = useState(lead?.creator || '')
+   const [campaign, setCampaign] = useState(lead?.campign || 'Manual leads entry')
+   const [channel, setChannel] = useState(lead?.channel || 'Manual entry')
+
+   const { statuses } = useSelector((storeState) => storeState.statusModule)
 
    useEffect(() => {
+      loadLeads(user._id)
+
       const getEmptyLead = async () => {
          const emptyLead = await leadService.getEmptyLead()
          setNewLead(emptyLead)
@@ -47,7 +53,7 @@ export const LeadEdit = ({ setIsEdit }) => {
          setMessage(emptyLead.message || '')
          setCreatedAt(emptyLead.createdAt || Date.now())
          setEmail(emptyLead.email || '')
-         setStatus(emptyLead.status || 'New')
+         setStatus(emptyLead.status || t('New'))
          setCreator(emptyLead.creator || 'Admin')
       }
 
@@ -57,6 +63,7 @@ export const LeadEdit = ({ setIsEdit }) => {
    const handleChange = (ev, place = '') => {
       const field = ev.target?.name
       const value = ev.target?.value
+
       switch (field) {
          case 'managerName':
             setManagerName(value)
@@ -116,10 +123,17 @@ export const LeadEdit = ({ setIsEdit }) => {
          createdAt: Date.now(),
          email,
          status,
-         creator
+         creator,
+         campaign,
+         channel
       }
 
-      if (newLead) leadToSave['_id'] = newLead._id
+      if (newLead) {
+         leadToSave['_id'] = newLead._id
+         leadToSave['campaign'] = t('Manual leads entry')
+         leadToSave['channel'] = t('Manual entry')
+
+      }
       await dispatch((saveLead(leadToSave)))
       await dispatch(loadLeads(user._id))
       await dispatch(getActionSetLead(null))
@@ -217,7 +231,12 @@ export const LeadEdit = ({ setIsEdit }) => {
             </div>
             <div className="flex column">
                <p>{t('Status')} </p>
-               <select onChange={handleChange} value={status} name='status'>
+               <select onChange={(ev) => { handleChange(ev, lead) }} value={t(status)} name='status'>
+                  {statuses.map((s, idx) => {
+                     return (<option key={idx} value={s.statusName || t(s.statusName)} >{t(s.statusName)}</option>)
+                  })}
+               </select>
+               {/* <select onChange={handleChange} value={t(status)} name='status'>
                   <option value="New">{t('New')}</option>
                   <option value="New plus call">{t('New plus call')}</option>
                   <option value="No response">{t('No response')}</option>
@@ -235,7 +254,7 @@ export const LeadEdit = ({ setIsEdit }) => {
                   <option value="return in the distant future">{t('return in the distant future')}</option>
                   <option value="Not relevant - didn't let him talk">{t('Not relevant - didn\'t let him talk')}</option>
                   <option value="Existing Customer">{t('Existing Customer')}</option>
-               </select>
+               </select> */}
             </div>
             <div className="flex column message">
                <p>{t('Message')} </p>
