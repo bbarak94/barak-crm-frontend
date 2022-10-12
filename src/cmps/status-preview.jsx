@@ -98,7 +98,6 @@ export const StatusPreview = ({ user, setIsEdit, status }) => {
       minute = ('0' + minute).slice(-2);
       const timeToShow = time.getDate()
 
-      // return `${hour}:${minute}`
       return `${time.toLocaleString()}`
    }
 

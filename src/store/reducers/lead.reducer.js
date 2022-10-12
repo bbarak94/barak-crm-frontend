@@ -25,7 +25,6 @@ export function leadReducer(state = initialState, action) {
          newState = { ...state, lead: action.lead }
          break
       case 'SET_FILTER_BY':
-         console.log('setFilterBy')
          newState = { ...state, filterBy: {...action.filterBy} }
          break
       case 'REAMOVE_LEAD':

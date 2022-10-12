@@ -13,7 +13,7 @@ import { StatusEdit } from '../cmps/status-edit'
 
 
 
-export const StatusesApp = ({setIsEditStatuses, isEditStatuses}) => {
+export const StatusesApp = ({ setIsEditStatuses, isEditStatuses }) => {
    const navigation = useNavigate()
    const dispatch = useDispatch()
    const { t, i18n } = useTranslation();
@@ -35,7 +35,7 @@ export const StatusesApp = ({setIsEditStatuses, isEditStatuses}) => {
    useEffect(() => {
       if (!user) {
          navigation('/')
-         return
+         // return
       }
       dispatch(loadStatuses(user._id))
    }, [])
@@ -67,10 +67,7 @@ export const StatusesApp = ({setIsEditStatuses, isEditStatuses}) => {
       </section>
    )
 
-   // if(isEditStatuses) return (
-   //    <StatusesEdit />
-   // )
-   
+
    else return (
       <section className='statuses-app'>
          <div className='flex align-center space-between' style={{ gap: '10px', marginBottom: '5px' }}>
@@ -82,7 +79,7 @@ export const StatusesApp = ({setIsEditStatuses, isEditStatuses}) => {
          </div>
          {(isEdit) && <StatusEdit setIsEdit={setIsEdit} isEdit={isEdit} />}
          <div className='status-table'>
-            <StatusList setIsEdit={setIsEdit} statuses={statuses}  />
+            <StatusList setIsEdit={setIsEdit} statuses={statuses} />
          </div>
 
       </section>

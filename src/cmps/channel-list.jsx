@@ -9,15 +9,14 @@ import { useEffectUpdate } from '../hooks/useEffectUpdate'
 import { loadChannels } from "../store/actions/channel.action.js";
 
 import { ChannelPreview } from "./channel-preview.jsx"
-import { ChannelEdit } from "./channel-edit.jsx"
 
 
-export const ChannelList = ({ isEditCampaign, setIsEditCampaign, isEditChannel, setIsEditChannel, channels }) => {
+export const ChannelList = ({ campaign, isEditCampaign, setIsEditCampaign, isEditChannel, setIsEditChannel, channels }) => {
    const { t, i18n } = useTranslation();
    const { user } = useSelector((storeState) => storeState.userModule)
    const dispatch = useDispatch()
    const navigation = useNavigate()
-   
+
 
    useEffect(() => {
       if (!user) {
@@ -26,11 +25,11 @@ export const ChannelList = ({ isEditCampaign, setIsEditCampaign, isEditChannel, 
       }
       dispatch(loadChannels(user._id))
    }, [])
-   
+
    const onRefreshChannels = async () => {
       await dispatch(loadChannels(user._id))
    }
-   
+
 
 
    return (
@@ -40,6 +39,7 @@ export const ChannelList = ({ isEditCampaign, setIsEditCampaign, isEditChannel, 
          <div className='flex align-center space-between' style={{ gap: '10px', marginBottom: '5px' }}>
             <div className='flex align-center'>
                <button className='add-btn' onClick={() => setIsEditChannel(true)}>{t('Add Channel')}</button>
+               <h1 className='title' style={{ margin: '0' }}>{campaign?.campaignName} - </h1>
                <h1 className='title' style={{ margin: '0' }}>{t('Channels Count')}: {channels?.length | 0}</h1>
             </div>
             <button className='refresh-btn' onClick={() => { onRefreshChannels() }}>{t('Refresh')}</button>
@@ -50,8 +50,8 @@ export const ChannelList = ({ isEditCampaign, setIsEditCampaign, isEditChannel, 
          <div className='channel-table'>
             <ChannelList setIsEditCampaign={setIsEditCampaign} channels={channels} />
          </div>  */}
-         
-       {/* {(isEditCampaign) && <div className='channel-table'>
+
+         {/* {(isEditCampaign) && <div className='channel-table'>
             <ChannelList setIsEditCampaign={setIsEditCampaign} channels={channels} />
          </div>
          }  */}
@@ -63,8 +63,8 @@ export const ChannelList = ({ isEditCampaign, setIsEditCampaign, isEditChannel, 
                   <td>#</td>
                   <td>{t('Channel')}</td>
                   <td>{t('Channel created at')}</td>
-                  <td>{t('Channel Manager')}</td>
-                  <td>{t('Permissions')}</td>
+                  <td>{t('Channel type')}</td>
+                  {/* <td>{t('Permissions')}</td> */}
                   <td>{t('Actions')}</td>
                </tr>
             </thead>

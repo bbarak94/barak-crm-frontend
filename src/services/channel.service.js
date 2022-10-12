@@ -16,14 +16,14 @@ export const channelService = {
 
 
 async function query(userId) {
-   const channels =  await httpService.get(`channel/byUser/${userId}`)
+   const channels = await httpService.get(`channel/byUser/${userId}`)
    saveLocalChannels(channels)
    return channels
 }
 
 async function getById(channelId) {
    const channel = await httpService.get(`channel/byChannel/${channelId}`)
-   
+
    return channel
 }
 
@@ -49,13 +49,11 @@ async function getEmptyChannel() {
    var now = new Date(Date.now())
    // var est = new Date(Date.now())
    const newChannel = {
-      // restaurantName: user.fullname,
-      // restaurantId: user._id,
-      // packageId: utilService.makeNum(),
+      _id: utilService.makeId(),
       createdAt: now,
       channelName: '',
       status: 'New',
-      creator: user.fullname,
+      channelType: 'Excel channel'
    }
    return newChannel
 }

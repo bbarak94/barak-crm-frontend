@@ -12,9 +12,10 @@ import { userService } from "../services/user.service"
 import { ChannelList } from "./channel-list"
 
 import * as XLSX from 'xlsx'
+import { utilService } from "../services/util.service"
 
 
-export const ChannelEdit = ({ channel,setIsEditChannel, setIsEditCampaign, isEditCampaign }) => {
+export const ChannelEdit = ({ channel, setIsEditChannel, setIsEditCampaign, isEditCampaign }) => {
    const dispatch = useDispatch()
    const { t, i18n } = useTranslation();
 
@@ -24,7 +25,7 @@ export const ChannelEdit = ({ channel,setIsEditChannel, setIsEditCampaign, isEdi
    const [newChannel, setNewChannel] = useState()
    const [_id, set_id] = useState(channel?._id || '')
    const [channelName, setChannelName] = useState(channel?.channelName || '')
-   const [channelManager, setChannelManager] = useState(channel?.channelManager || 'Admin')
+   const [channelType, setChannelType] = useState(channel?.channelManager || 'excel channel')
    const [createdAt, setCreatedAt] = useState(channel?.createdAt || '')
    const [message, setMessage] = useState(channel?.message || '')
 
@@ -34,7 +35,8 @@ export const ChannelEdit = ({ channel,setIsEditChannel, setIsEditCampaign, isEdi
          setNewChannel(emptyChannel)
          set_id(emptyChannel._id || '')
          setChannelName(emptyChannel.channelName)
-         setChannelManager(emptyChannel.channelManager)
+         setChannelType(emptyChannel.channelType)
+         // setChannelManager(emptyChannel.channelManager)
          setCreatedAt(emptyChannel.createdAt)
       }
 
@@ -48,12 +50,15 @@ export const ChannelEdit = ({ channel,setIsEditChannel, setIsEditCampaign, isEdi
          case 'channelName':
             setChannelName(value)
             break
-         case 'channelManager':
-            setChannelManager(value)
+         case 'channelType':
+            setChannelType(value)
             break
-         case 'message':
-            setMessage(value)
-            break
+         // case 'channelManager':
+         //    setChannelManager(value)
+         //    break
+         // case 'message':
+         //    setMessage(value)
+         //    break
       }
    }
 
@@ -61,10 +66,10 @@ export const ChannelEdit = ({ channel,setIsEditChannel, setIsEditCampaign, isEdi
       ev.preventDefault()
       const campaignToSave = campaign
       const channelToSave = {
+         _id: utilService.makeId(),
          channelName,
+         channelType,
          createdAt: Date.now(),
-         channelManager,
-         message,
       }
 
       if (newChannel) channelToSave['_id'] = newChannel._id
@@ -155,9 +160,20 @@ export const ChannelEdit = ({ channel,setIsEditChannel, setIsEditCampaign, isEdi
             </div>
 
             <div className="flex column">
+               <p>{t('Channel type')} </p>
+               <select onChange={handleChange} value={channelType} name='channelType'>
+                  <option value={t('Excel channel')}>{t('Excel channel')}</option>
+                  <option value={t('Zappier channel')}>{t('Zappier channel')}</option>
+                  <option value={t('Manual entry channel')}>{t('Manual entry channel')}</option>
+               </select>
+            </div>
+
+
+
+
+            {/* <div className="flex column">
                <p>{t('Channel Manager')} </p>
                <select onChange={handleChange} value={channelManager} name='channelManager'>
-
                {users.map((user, idx) => {
                return (
                   <option key={idx} value={user.fullname}>
@@ -165,8 +181,8 @@ export const ChannelEdit = ({ channel,setIsEditChannel, setIsEditCampaign, isEdi
                   </option>)
             })}
                </select>
-            </div>
-            <form>
+            </div> */}
+            {/* <form>
                   <div className='file'>
                      <label htmlFor='files' className="btn">{t('Import XLSX')}</label>
                      <input id="files" type="file" accept={".xlsx"} onChange={(e) => {
@@ -174,13 +190,9 @@ export const ChannelEdit = ({ channel,setIsEditChannel, setIsEditCampaign, isEdi
                         readExcel(file)
                      }} />
                   </div>
-               </form>
+               </form> */}
 
-            {/* <div className="flex column Message">
-               <p>{t('Message')} </p>
-               <textarea min="2" rows="3" autoComplete='off' onChange={handleChange} className='channel-input' value={message}
-                  placeholder={t('Message')} variant='filled' type='text' name='message'></textarea>
-            </div> */}
+
 
             <button className="save" onClick={onSaveChannel}>{t('Save')}</button>
          </form>
@@ -190,6 +202,6 @@ export const ChannelEdit = ({ channel,setIsEditChannel, setIsEditCampaign, isEdi
          }
          }
          >x</button>
-         {(isEditCampaign) && <ChannelList setIsEditCampaign={setIsEditCampaign} isEditCampaign={isEditCampaign}  />}
+         {(isEditCampaign) && <ChannelList setIsEditCampaign={setIsEditCampaign} isEditCampaign={isEditCampaign} />}
       </div>)
 }

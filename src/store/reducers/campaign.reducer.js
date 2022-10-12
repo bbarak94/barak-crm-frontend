@@ -9,6 +9,7 @@ const initialState = {
 export function campaignReducer(state = initialState, action) {
    var newState = state
    var campaigns
+
    switch (action.type) {
       case 'SET_CAMPAIGNS':
          newState = { ...state, campaigns: action.campaigns }

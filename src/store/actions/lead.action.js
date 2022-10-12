@@ -76,8 +76,6 @@ export function removeLead(leadId) {
 export function saveLead(lead) {
     return async (dispatch) => {
         const actionType = lead?._id ? 'UPDATE_LEAD' : 'ADD_LEAD'
-        console.log('lead:',lead)        
-        console.log('actionType:',actionType)        
         try {
             dispatch({ type: actionType, lead })
             const savedLead = await leadService.save(lead)

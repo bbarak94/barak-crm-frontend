@@ -53,8 +53,8 @@ export const CampaignApp = () => {
          <div className='campaign-table'>
             <CampaignList setIsEditCampaign={setIsEditCampaign} campaigns={campaigns} />
          </div>
-         {(isEditChannel) && <ChannelEdit setIsEditCampaign={setIsEditCampaign} channels={campaign?.channels} />}
-         {(isEditCampaign) && <ChannelList setIsEditChannel={setIsEditChannel} setIsEditCampaign={setIsEditCampaign} channels={campaign?.channels} />}
+         {(isEditChannel) && <ChannelEdit setIsEditChannel={setIsEditChannel} setIsEditCampaign={setIsEditCampaign} channels={campaign?.channels} />}
+         {(isEditCampaign) && <ChannelList setIsEditChannel={setIsEditChannel} setIsEditCampaign={setIsEditCampaign} campaign={campaign} channels={campaign?.channels} />}
 
 
 

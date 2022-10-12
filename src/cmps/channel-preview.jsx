@@ -107,6 +107,9 @@ export const ChannelPreview = ({ user, setIsEditChannel, channel }) => {
             {getTime(channel.createdAt)}
          </td>
          <td>
+            {t(channel.channelType)}
+         </td>
+         {/* <td>
             <div className="flex column">
                <select onChange={handleChange} value={channelManager} name='channelManager'>
                   {users.map((user, idx) => {
@@ -117,8 +120,8 @@ export const ChannelPreview = ({ user, setIsEditChannel, channel }) => {
                   })}
                </select>
             </div>
-         </td>
-         <td>
+         </td> */}
+         {/* <td>
             <form className='channel-edit-form flex' onSubmit={onSaveChannel}>
                <div className="flex column">
                   <select onChange={handleChange} value={permissions} name='permissions'>
@@ -127,7 +130,7 @@ export const ChannelPreview = ({ user, setIsEditChannel, channel }) => {
                   </select>
                </div>
             </form>
-         </td>
+         </td> */}
          <td>
             <button onClick={async () => {
                await dispatch(setChannel(channel._id))

@@ -140,23 +140,6 @@ export const LeadEdit = ({ setIsEdit }) => {
       setIsEdit(false)
    }
 
-   const getTime = (timeStamp) => {
-      const time = new Date(timeStamp)
-      let hour = time.getHours();
-      hour = ('0' + hour).slice(-2);
-      let minute = time.getMinutes();
-      minute = ('0' + minute).slice(-2);
-      const timeStr = `${hour}:${minute}:00`
-      return timeStr
-   }
-
-   const getTimeStamp = (timeStr) => {
-      var timeStamp = new Date(Date.now())
-      timeStamp.setHours(timeStr.substring(0, 2))
-      timeStamp.setMinutes(timeStr.substring(3, 5))
-      timeStamp.setSeconds(timeStr.substring(6))
-      return +timeStamp
-   }
 
    if (!newLead) return <h1>Loading...</h1>
 
@@ -236,25 +219,7 @@ export const LeadEdit = ({ setIsEdit }) => {
                      return (<option key={idx} value={s.statusName || t(s.statusName)} >{t(s.statusName)}</option>)
                   })}
                </select>
-               {/* <select onChange={handleChange} value={t(status)} name='status'>
-                  <option value="New">{t('New')}</option>
-                  <option value="New plus call">{t('New plus call')}</option>
-                  <option value="No response">{t('No response')}</option>
-                  <option value="In the treatment - an initial contact is made">{t('In the treatment - an initial contact is made')}</option>
-                  <option value="Return to the customer - no call was made">{t('Return to the customer - no call was made')}</option>
-                  <option value="A quote has been sent">{t('A quote has been sent')}</option>
-                  <option value="A meeting is scheduled">{t('A meeting is scheduled')}</option>
-                  <option value="A deal was closed">{t('A deal was closed')}</option>
-                  <option value="No response several times">{t('No response several times')}</option>
-                  <option value="Not interested for now">{t('Not interested for now')}</option>
-                  <option value="Returning appeal">{t('Returning appeal')}</option>
-                  <option value="black list">{t('black list')}</option>
-                  <option value="Not a business owner">{t('Not a business owner')}</option>
-                  <option value="After coordination - sending details via Whatsapp">{t('After coordination - sending details via Whatsapp')}</option>
-                  <option value="return in the distant future">{t('return in the distant future')}</option>
-                  <option value="Not relevant - didn't let him talk">{t('Not relevant - didn\'t let him talk')}</option>
-                  <option value="Existing Customer">{t('Existing Customer')}</option>
-               </select> */}
+
             </div>
             <div className="flex column message">
                <p>{t('Message')} </p>

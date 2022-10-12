@@ -25,6 +25,9 @@ import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { useTranslation } from 'react-i18next';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+
+import { MultiEdit } from './multi-edit'
 
 import { loadStatuses } from '../store/actions/status.action';
 
@@ -51,13 +54,16 @@ export const LeadTable = ({ leadsToShow, leads, setIsEdit, filterBy }) => {
 
   useEffect(() => {
     loadLeads(user._id)
+    loadStatuses(user._id)
   }, [status])
   useEffectUpdate(() => {
     loadLeads(user._id)
+    loadStatuses(user._id)
   }, [status])
-  // useEffect(() => {
-  //   loadLeads(user._id)
-  // }, [leads])
+
+  useEffect(() => {
+    loadLeads(user._id)
+  }, [leads])
 
   useEffectUpdate(() => {
     loadLeads(user._id)
@@ -390,6 +396,16 @@ export const LeadTable = ({ leadsToShow, leads, setIsEdit, filterBy }) => {
             </IconButton>
           </Tooltip>
         )}
+
+
+        {numSelected > 0 ? (
+          <MultiEdit selectedLeads={selected}></MultiEdit>
+        ) : (<></>)        
+        }
+
+
+
+
         {/* <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
@@ -454,6 +470,7 @@ export const LeadTable = ({ leadsToShow, leads, setIsEdit, filterBy }) => {
         selected.slice(selectedIndex + 1),
       );
     }
+    
     setSelected(newSelected);
   };
 
@@ -547,17 +564,9 @@ export const LeadTable = ({ leadsToShow, leads, setIsEdit, filterBy }) => {
 
                         </select>
                       </TableCell>
-
                       <TableCell align="right">{getTime(row?.createdAt)}</TableCell>
-
-
-
-
-
                       <TableCell align="right">
-                        {/* {t(row.status)} */}
 
-                        {/* <form className='lead-edit-form flex' onSubmit={onSaveLead}> */}
                         <form className='lead-edit-form flex' >
                           <div className="flex column">
                             <select onClick={onClick} onChange={(ev) => { handleChange(ev, row) }} value={t(row.status)} name='status'>
@@ -567,13 +576,7 @@ export const LeadTable = ({ leadsToShow, leads, setIsEdit, filterBy }) => {
                             </select>
                           </div>
                         </form>
-
                       </TableCell>
-
-
-
-
-
                       <TableCell align="right">{row.campaign}</TableCell>
                       <TableCell align="right">{row.channel}</TableCell>
                       <TableCell align="right">{row.businessName}</TableCell>

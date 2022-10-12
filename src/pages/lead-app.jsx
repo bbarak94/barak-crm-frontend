@@ -6,14 +6,11 @@ import { useTranslation } from 'react-i18next';
 import { loadLeads, saveLead } from '../store/actions/lead.action'
 import { userService } from '../services/user.service'
 
-import { InsightsApp } from '../cmps/insights-app'
 import { LeadEdit } from '../cmps/lead-edit'
-import { LeadList } from '../cmps/lead-list'
 import { LeadTable } from '../cmps/lead-table'
 
 import { StatusesApp } from '../cmps/statuses-app.jsx'
 
-import { LeadsTablePagination } from '../cmps/leads-table-pagination';
 
 import * as XLSX from 'xlsx'
 import { loadStatuses } from '../store/actions/status.action';
@@ -39,21 +36,37 @@ export const LeadApp = () => {
    const [isEditStatuses, setIsEditStatuses] = useState(false)
 
 
+
+   useEffect(() => {
+      if (!user) {
+         navigation('/')
+         return
+      }
+      dispatch(loadLeads(user._id))
+      dispatch(loadStatuses(user._id))
+   }, [])
+
+
    useEffectUpdate(() => {
-      loadLeads(user._id)
       filterLeads()
+      loadLeads(user?._id)
+      // loadStatuses(user?._id)
+      dispatch(loadStatuses(user._id))
    }, [leads, filterBy])
 
-   useEffect(() => {
-      filterLeads()
-   }, [filterBy])
+   // useEffect(() => {
+   //    filterLeads()
+   //    loadStatuses(user?._id)
+   // }, [filterBy])
 
-   useEffect(() => {
-      loadLeads(user?._id)
-   }, [leads])
+   // useEffect(() => {
+   //    loadLeads(user?._id)
+   //    loadStatuses(user._id)
+   // }, [leads])
 
    useEffectUpdate(() => {
       loadLeads(user._id)
+      loadStatuses(user._id)
    }, [leads])
 
    const editStatuses = () => {
@@ -117,14 +130,6 @@ export const LeadApp = () => {
 
    }
 
-   useEffect(() => {
-      if (!user) {
-         navigation('/')
-         return
-      }
-      dispatch(loadLeads(user._id))
-      dispatch(loadStatuses(user._id))
-   }, [])
 
    const onRefreshLeads = async () => {
       await dispatch(loadLeads(user._id))
@@ -198,15 +203,17 @@ export const LeadApp = () => {
    const filterLeads = () => {
       if (user?._id) {
          loadLeads(user._id)
+         loadStatuses(user._id)
+
       }
       let filtered = leads
       if (filterBy.text) {
          filtered = filtered.filter((lead, idx) => {
             if ((lead.businessName + '')?.includes(filterBy.text) ||
                (lead.managerName + '')?.includes(filterBy.text) ||
-               (lead.phoneNumber + '')?.includes(filterBy.text) ||
-               (lead.phoneNumber2 + '')?.includes(filterBy.text) ||
-               (lead.phoneNumber3 + '')?.includes(filterBy.text) ||
+               (lead.phoneNumber + '').replace('-', '')?.includes(filterBy.text) ||
+               (lead.phoneNumber2 + '').replace('-', '')?.includes(filterBy.text) ||
+               (lead.phoneNumber3 + '').replace('-', '')?.includes(filterBy.text) ||
                (lead.address + '')?.includes(filterBy.text) ||
                (lead.address2 + '')?.includes(filterBy.text) ||
                (lead.role + '')?.includes(filterBy.text) ||
@@ -258,22 +265,15 @@ export const LeadApp = () => {
       </section>
    )
 
-   // if(isEditStatuses) return (
-   //    <StatusesEdit />
-   // )
 
    else return (
       <section className='lead-app'>
          <LeadFilter filterBy={filterBy} leads={leads} user={user} users={users} campaigns={campaigns} statuses={statuses} />
-
          {isEditStatuses && <StatusesApp setIsEditStatuses={setIsEditStatuses} isEditStatuses={isEditStatuses} />}
          <div className='flex align-center space-between' style={{ gap: '10px', marginBottom: '5px' }}>
             <div className='flex align-center'>
-
                <button className='exp-btn' onClick={() => editStatuses()}>{t('Edit Statuses')}</button>
                <button className='add-btn' onClick={() => setIsEdit(true)}>{t('Add a single lead')}</button>
-
-
                <form>
                   <div className='file'>
                      <label htmlFor='files' className="btn">{t('Import multiple leads')}</label>
@@ -284,15 +284,14 @@ export const LeadApp = () => {
                   </div>
                </form>
                <button className='exp-btn' onClick={() => exportLeads()}>{t('Export Leads')}</button>
-
                <h1 className='title' style={{ margin: '0' }}>{t('Total Leads')}: {leads.length}</h1>
-               <h1 className='title' style={{ margin: '0' }}>{t('Chosen')}: {leadsToShow.length}</h1>
+               {(leads.length > leadsToShow.length) && (
+                  <h1 className='title' style={{ margin: '0' }}>{t('After filter')}: {leadsToShow.length}</h1>
+               )}
             </div>
             <button className='refresh-btn' onClick={() => { onRefreshLeads() }}>{t('Refresh')}</button>
          </div>
          {(isEdit) && <LeadEdit setIsEdit={setIsEdit} />}
-         {/* <LeadsTablePagination leads={leads} /> */}
-
          <div className='lead-table'>
             <LeadTable leadsToShow={leadsToShow} leads={leads} setIsEdit={setIsEdit} filterBy={filterBy} />
             {/* <LeadList setIsEdit={setIsEdit} leads={leads} filterBy={filterBy} /> */}

@@ -14,7 +14,6 @@ import { StatusPreview } from "./status-preview.jsx"
 export const StatusList = ({ setIsEdit, statuses }) => {
    const { t, i18n } = useTranslation();
    const { user, users } = useSelector((storeState) => storeState.userModule)
-   // const { statuses } = useSelector((storeState) => storeState.statusesModule)
    
    useEffectUpdate(() => {
       loadStatuses(user._id)

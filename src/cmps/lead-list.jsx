@@ -12,6 +12,7 @@ import { loadLeads } from "../store/actions/lead.action.js";
 import { LeadPreview } from "./lead-preview"
 import { LeadFilter } from '../cmps/lead-filter'
 import { useEffect, useState } from "react";
+import { loadStatuses } from "../store/actions/status.action";
 
 
 export const LeadList = ({ setIsEdit, leads, filterBy }) => {
@@ -26,16 +27,22 @@ export const LeadList = ({ setIsEdit, leads, filterBy }) => {
 
    useEffectUpdate(() => {
       loadLeads(user._id)
+      loadStatuses(user._id)
+
       filterLeads()
    }, [leads, filterBy])
 
    useEffect(() => {
       filterLeads()
+      loadStatuses(user._id)
+
    }, [filterBy])
 
 
    const filterLeads = () => {
       loadLeads(user._id)
+      loadStatuses(user._id)
+
       let filteredLeads = leads
       if (filterBy.date) {
       }

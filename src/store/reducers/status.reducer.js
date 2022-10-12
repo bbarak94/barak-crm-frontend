@@ -9,12 +9,12 @@ const initialState = {
 export function statusReducer(state = initialState, action) {
    var newState = state
    var statuses
+
    switch (action.type) {
       case 'SET_STATUSS':
          newState = { ...state, statuses: action.statuses }
          break
       case 'SET_STATUS':
-         console.log('setStatus')
          newState = { ...state, status: action.status }
          break
       case 'REMOVE_STATUS':

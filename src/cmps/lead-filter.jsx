@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { useEffectUpdate } from '../hooks/useEffectUpdate'
 import { loadCampaigns, setCampaign } from '../store/actions/campaign.action'
 
-import { loadLeads } from "../store/actions/lead.action.js";
 import { setFilterBy } from "../store/actions/lead.action"
 
 
@@ -13,20 +12,18 @@ import MultipleSelectStatus from "./multiple-select-status";
 import MultipleSelectUser from "./multiple-select-user";
 import MultipleSelectCampaign from "./multiple-select-campaign";
 import MultipleSelectChannel from "./multiple-select-channel";
-// import { setStatus } from "../store/actions/status.action";
 
-export const LeadFilter = ({ filterBy, setIsEdit, leads, user, users }) => {
+export const LeadFilter = ({ filterBy, user, users }) => {
    const { t, i18n } = useTranslation();
    const navigation = useNavigate()
    const { campaigns } = useSelector((storeState) => storeState.campaignModule)
    const { statuses } = useSelector((storeState) => storeState.statusModule)
-   // const { filterBy } = useSelector((storeState) => storeState.leadModule)
 
    const dispatch = useDispatch()
 
 
-   
-   
+
+
    const [text, setText] = useState(filterBy.text)
    const [date, setDate] = useState(filterBy.date)
    const [creator, setCreator] = useState([])
@@ -60,14 +57,14 @@ export const LeadFilter = ({ filterBy, setIsEdit, leads, user, users }) => {
             break
          case 'date':
             setDate(value)
+            newFilterBy.date = value
             break
       }
-      newFilterBy.date = value
       dispatch((setFilterBy(newFilterBy)))
    }
 
    const clearFilter = (ev) => {
-      const newFilterBy = { date: '', text: '', status: '', creator: [], campaign: [],channel: [] }
+      const newFilterBy = { date: '', text: '', status: '', creator: [], campaign: [], channel: [] }
       setText('')
       setDate('')
       setStatus([])

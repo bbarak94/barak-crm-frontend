@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { login, signup, loadUsers } from '../store/actions/user.action'
 import { loadLeads } from '../store/actions/lead.action'
+import { loadStatuses } from '../store/actions/status.action'
 
 export function LoginSignup() {
     const navigation = useNavigate()
@@ -27,6 +28,8 @@ export function LoginSignup() {
         } else if (res.isAdmin) {
             await dispatch(loadUsers())
             await dispatch(loadLeads(res._id))
+            await dispatch(loadStatuses(res._id))
+
         }
         else {
             await dispatch(loadLeads(res._id))

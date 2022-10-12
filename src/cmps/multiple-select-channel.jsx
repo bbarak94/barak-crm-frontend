@@ -34,12 +34,10 @@ function getStyles(name, channel, theme) {
 export default function MultipleSelectChannel({ filterBy, setChannel, channel, campaigns }) {
   const names = []
   campaigns.forEach(c => {
-   console.log('c:',c)
    
    if(c.channels?.length) {
 
       c.channels.map((cha,idx)=>{
-         console.log('cha:',cha)         
          names.push(cha.channelName)
 
       })
@@ -47,7 +45,6 @@ export default function MultipleSelectChannel({ filterBy, setChannel, channel, c
    }
    //  names.push(c.campaignName)
   })
-  console.log('names:',names)
   
   const dispatch = useDispatch()
 
@@ -87,7 +84,6 @@ export default function MultipleSelectChannel({ filterBy, setChannel, channel, c
           input={<OutlinedInput label="Name" />}
           MenuProps={MenuProps}
         >
-        {console.log(names)}
           {names.map((name, idx) => (
             <MenuItem
               key={idx}
