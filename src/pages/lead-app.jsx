@@ -34,8 +34,28 @@ export const LeadApp = () => {
 
    const [isEdit, setIsEdit] = useState(false)
    const [isEditStatuses, setIsEditStatuses] = useState(false)
+   const [isEditFields, setIsEditFields] = useState(false)
+   const [fields, setFields] = useState([])
+   const [connectedFields, setConnectedFields] = useState({ קמפיין: 'קבצי דטא', ערוץ: 'קובץ 1' })
+   const [data, setData] = useState([])
+   const appFields = [
+      { fieldName: 'ID', fieldProp: '_id' },
+      { fieldName: 'Manager Name', fieldProp: 'managerName' },
+      { fieldName: 'Business Name', fieldProp: 'businessName' },
+      { fieldName: 'Phone Number', fieldProp: 'phoneNumber' },
+      { fieldName: 'Phone Number2', fieldProp: 'phoneNumber2' },
+      { fieldName: 'Phone Number3', fieldProp: 'phoneNumber3' },
+      { fieldName: 'Class Desc', fieldProp: 'classDesc' },
+      { fieldName: 'Address', fieldProp: 'address' },
+      { fieldName: 'Address2', fieldProp: 'address2' },
+      { fieldName: 'Role', fieldProp: 'role' },
+      { fieldName: 'Message', fieldProp: 'message' },
+      { fieldName: 'Created at', fieldProp: 'createdAt' },
+      { fieldName: 'Email', fieldProp: 'email' },
+      { fieldName: 'Status', fieldProp: 'status' },
+      { fieldName: 'Creator', fieldProp: 'creator' },
 
-
+   ]
 
    useEffect(() => {
       if (!user) {
@@ -121,6 +141,8 @@ export const LeadApp = () => {
       });
 
 
+
+
       var encodedUri = encodeURI(csvContent);
 
       var link = document.createElement("a");
@@ -137,6 +159,27 @@ export const LeadApp = () => {
       navigation('/lead')
    }
 
+
+   const importLeads = async (ev) => {
+      ev.preventDefault()
+      await addLeads(data)
+      setIsEditFields(false)
+
+
+   }
+
+
+
+   const handleChange = (ev) => {
+      const newFields = { ...connectedFields }
+      if (ev.target.name === 'channel') {
+         newFields[t('Campaign')] = ev.target.value.split(',')[0]
+         newFields[t('Channel')] = ev.target.value.split(',')[1]
+      } else {
+         newFields[ev.target.value] = ev.target.name
+      }
+      setConnectedFields(newFields)
+   }
 
    const getTime = (timeStamp) => {
       const time = new Date(timeStamp)
@@ -158,10 +201,67 @@ export const LeadApp = () => {
          fileReader.onload = (e) => {
             const bufferArray = e.target.result
             const wb = XLSX.read(bufferArray, { type: 'buffer' })
+
             const wsname = wb.SheetNames[0]
+
             const ws = wb.Sheets[wsname]
+
+
             const data = XLSX.utils.sheet_to_json(ws)
-            addLeads(data)
+
+
+
+
+
+            var sheet_name_list = wb.SheetNames;
+            sheet_name_list.forEach(function (y) {
+               var worksheet = wb.Sheets[y];
+               var headers = {};
+               var data = [];
+               for (let z in worksheet) {
+                  if (z[0] === '!') continue;
+                  //parse out the column, row, and value
+                  var tt = 0;
+                  for (var i = 0; i < z.length; i++) {
+                     if (!isNaN(z[i])) {
+                        tt = i;
+                        break;
+                     }
+                  };
+                  var col = z.substring(0, tt);
+                  var row = parseInt(z.substring(tt));
+                  var value = worksheet[z].v;
+
+                  //store header names
+                  if (row == 1 && value) {
+                     headers[col] = value;
+
+                     continue;
+                  }
+
+                  if (!data[row]) data[row] = {};
+                  data[row][headers[col]] = value;
+               }
+               var headersArr = []
+               for (const [key, value] of Object.entries(headers)) {
+                  headersArr.push(value)
+
+               }
+               setIsEditFields(true)
+               setFields(headersArr)
+               //drop those first two rows which are empty
+               data.shift();
+               data.shift();
+            });
+
+
+
+
+
+
+
+            setData(data)
+            // addLeads(data)
             resolve(data)
          }
          fileReader.onerror = ((err) => {
@@ -179,21 +279,23 @@ export const LeadApp = () => {
 
       leads.forEach((lead, idx) => {
          const leadToSave = {
-            managerName: lead[(t('Manager Name'))] || '',
-            businessName: lead[(t('Business Name'))] || '',
-            phoneNumber: lead[(t('Phone Number'))] || '',
-            phoneNumber2: lead[(t('Phone Number2'))] || '',
-            phoneNumber3: lead[(t('Phone Number3'))] || '',
-            classDesc: lead[(t('Class Desc'))] || '',
-            address: lead[(t('Address'))] || '',
-            address2: lead[(t('Address2'))] || '',
-            role: lead[(t('Role'))] || '',
-            message: lead[(t('Message'))] || '',
+            managerName: lead[connectedFields[t('Manager Name')]] || '',
+            businessName: lead[connectedFields[t('Business Name')]] || '',
+            phoneNumber: lead[connectedFields[t('Phone Number')]] || '',
+            phoneNumber2: lead[connectedFields[t('Phone Number2')]] || '',
+            phoneNumber3: lead[connectedFields[t('Phone Number3')]] || '',
+            classDesc: lead[connectedFields[t('Class Desc')]] || '',
+            address: lead[connectedFields[t('Address')]] || '',
+            address2: lead[connectedFields[t('Address2')]] || '',
+            role: lead[connectedFields[t('Role')]] || '',
+            message: lead[connectedFields[t('Message')]] || '',
             createdAt: Date.now(),
-            email: lead[(t('Email'))] || '',
-            status: lead[(t('Status'))] || 'New',
-            creator: lead[(t('Creator'))] || user.fullname,
+            email: lead[connectedFields[t('Email')]] || '',
+            status: lead[connectedFields[t('Status')]] || 'New',
+            creator: lead[connectedFields[t('Creator')]] || user.fullname
          }
+         leadToSave.campaign = connectedFields[t('Campaign')]
+         leadToSave.channel = connectedFields[t('Channel')]
 
          dispatch((saveLead(leadToSave)))
       })
@@ -270,6 +372,40 @@ export const LeadApp = () => {
       <section className='lead-app'>
          <LeadFilter filterBy={filterBy} leads={leads} user={user} users={users} campaigns={campaigns} statuses={statuses} />
          {isEditStatuses && <StatusesApp setIsEditStatuses={setIsEditStatuses} isEditStatuses={isEditStatuses} />}
+         {isEditFields && (
+            <div className='edit-fields flex'>
+               <form>
+                  <div className='flex' >
+                     <h2>{t('Channel')} :</h2>
+                     <select onChange={handleChange} name={'channel'}>
+                        {campaigns.map((c, idx) => {
+                           return c.channels.map((ch, idxx) => {
+                              if (t(ch.channelType) === t('Excel channel')) {
+                                 return (<option key={idxx} value={[c.campaignName, ch.channelName]} >{ch.channelName}</option>)
+                              }
+                           })
+                        })}
+
+                     </select>
+                  </div>
+
+                  {fields.map((f, idx) => {
+                     return <div className='flex' key={idx}>
+                        <h2>{f}:</h2>
+                        <select key={idx} onChange={handleChange} name={f}>
+                           <option value='' >{t('Remove Field')}</option>
+                           {appFields.map((appField, idxx) => {
+                              return <option key={idxx} value={appField.Prop}>{t(appField.fieldName)}</option>
+                           })}
+                        </select>
+                     </div>
+
+                  })}
+                  <button onClick={importLeads}>{t('Import')}</button>
+               </form>
+            </div>
+         )
+         }
          <div className='flex align-center space-between' style={{ gap: '10px', marginBottom: '5px' }}>
             <div className='flex align-center'>
                <button className='exp-btn' onClick={() => editStatuses()}>{t('Edit Statuses')}</button>

@@ -46,10 +46,8 @@ export const LeadTable = ({ leadsToShow, leads, setIsEdit, filterBy }) => {
   const { user, users } = useSelector((storeState) => storeState.userModule)
 
   const { t, i18n } = useTranslation();
-  const [newLead, setNewLead] = useState()
   const [status, setStatus] = useState('')
   const [creator, setCreator] = useState('')
-  const [count, setCount] = useState(0);
 
 
   useEffect(() => {
@@ -81,7 +79,15 @@ export const LeadTable = ({ leadsToShow, leads, setIsEdit, filterBy }) => {
 
 
 
+  const removeLeads = async (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    selected.map(async (s, idx) => {
+      await dispatch(removeLead(s))
+    })
+    await dispatch(loadLeads(user._id))
 
+  }
 
   const onClick = (e) => {
     e.stopPropagation();
@@ -385,7 +391,7 @@ export const LeadTable = ({ leadsToShow, leads, setIsEdit, filterBy }) => {
 
         {numSelected > 0 ? (
           <Tooltip title="Delete">
-            <IconButton>
+            <IconButton onClick={removeLeads}>
               <DeleteIcon />
             </IconButton>
           </Tooltip>
@@ -400,7 +406,7 @@ export const LeadTable = ({ leadsToShow, leads, setIsEdit, filterBy }) => {
 
         {numSelected > 0 ? (
           <MultiEdit selectedLeads={selected}></MultiEdit>
-        ) : (<></>)        
+        ) : (<></>)
         }
 
 
@@ -470,7 +476,7 @@ export const LeadTable = ({ leadsToShow, leads, setIsEdit, filterBy }) => {
         selected.slice(selectedIndex + 1),
       );
     }
-    
+
     setSelected(newSelected);
   };
 
