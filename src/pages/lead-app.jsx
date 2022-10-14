@@ -62,8 +62,8 @@ export const LeadApp = () => {
          navigation('/')
          return
       }
-      dispatch(loadLeads(user._id))
       dispatch(loadStatuses(user._id))
+      dispatch(loadLeads(user._id))
    }, [])
 
 
@@ -84,8 +84,8 @@ export const LeadApp = () => {
    //    loadStatuses(user._id)
    // }, [leads])
 
-   useEffectUpdate(() => {
-      loadLeads(user._id)
+   useEffectUpdate(async () => {
+      await loadLeads(user._id)
       loadStatuses(user._id)
    }, [leads])
 
@@ -379,67 +379,67 @@ export const LeadApp = () => {
          <LeadFilter filterBy={filterBy} leads={leads} user={user} users={users} campaigns={campaigns} statuses={statuses} />
          <div>
 
-         {isEditStatuses && <StatusesApp setIsEditStatuses={setIsEditStatuses} isEditStatuses={isEditStatuses} />}
-         {isEditFields && (
-            <div className='edit-fields flex'>
-               <form>
-                  <div className='flex' >
-                     <h2>{t('Channel')} :</h2>
-                     <select onChange={handleChange} name={'channel'}>
-                        {campaigns.map((c, idx) => {
-                           return c.channels.map((ch, idxx) => {
-                              if (t(ch.channelType) === t('Excel channel')) {
-                                 return (<option key={idxx} value={[c.campaignName, ch.channelName]} >{ch.channelName}</option>)
-                              }
-                           })
-                        })}
-
-                     </select>
-                  </div>
-
-                  {fields.map((f, idx) => {
-                     return <div className='flex' key={idx}>
-                        <h2>{f}:</h2>
-                        <select key={idx} onChange={handleChange} name={f}>
-                           <option value='' >{t('Remove Field')}</option>
-                           {appFields.map((appField, idxx) => {
-                              return <option key={idxx} value={appField.Prop}>{t(appField.fieldName)}</option>
+            {isEditStatuses && <StatusesApp setIsEditStatuses={setIsEditStatuses} isEditStatuses={isEditStatuses} />}
+            {isEditFields && (
+               <div className='edit-fields'>
+                  <form>
+                     <div className='edit-field'>
+                        <h2>{t('Channel')} :</h2>
+                        <select onChange={handleChange} name={'channel'}>
+                           {campaigns.map((c, idx) => {
+                              return c.channels.map((ch, idxx) => {
+                                 if (t(ch.channelType) === t('Excel channel')) {
+                                    return (<option key={idxx} value={[c.campaignName, ch.channelName]} >{ch.channelName}</option>)
+                                 }
+                              })
                            })}
+
                         </select>
                      </div>
 
-                  })}
-                  <button onClick={importLeads}>{t('Import')}</button>
-               </form>
+                     {fields.map((f, idx) => {
+                        return (<div className='edit-field' key={idx}>
+                           <h2>{f}:</h2>
+                           <select key={idx} onChange={handleChange} name={f}>
+                              <option value='' >{t('Remove Field')}</option>
+                              {appFields.map((appField, idxx) => {
+                                 return <option key={idxx} value={appField.Prop}>{t(appField.fieldName)}</option>
+                              })}
+                           </select>
+                        </div>)
+
+                     })}
+                     <button onClick={importLeads}>{t('Import')}</button>
+                  </form>
+               </div>
+            )
+            }
+            <div className='flex align-center space-between' style={{ gap: '10px', marginBottom: '5px' }}>
+               <div className='flex align-center'>
+                  {user.isAdmin && <button className='exp-btn' onClick={() => editStatuses()}>{t('Edit Statuses')}</button>}
+                  <button className='add-btn' onClick={() => setIsEdit(true)}>{t('Add a single lead')}</button>
+                  {user.isAdmin && <form>
+                     <div className='file'>
+                        <label htmlFor='files' className="btn">{t('Import multiple leads')}</label>
+                        <input id="files" type="file" accept={".xlsx"} onChange={(e) => {
+                           const file = e.target.files[0]
+                           readExcel(file)
+                        }} />
+                     </div>
+                  </form>}
+                  <button className='exp-btn' onClick={() => exportLeads()}>{t('Export Leads')}</button>
+                  <h1 className='title' style={{ margin: '0' }}>{t('Total Leads')}: {leads.length}</h1>
+                  {(leads.length > leadsToShow.length) && (
+                     <h1 className='title' style={{ margin: '0' }}>{t('After filter')}: {leadsToShow.length}</h1>
+                  )}
+               </div>
+               <button className='refresh-btn' onClick={() => { onRefreshLeads() }}>{t('Refresh')}</button>
             </div>
-         )
-         }
-         <div className='flex align-center space-between' style={{ gap: '10px', marginBottom: '5px' }}>
-            <div className='flex align-center'>
-               {user.isAdmin && <button className='exp-btn' onClick={() => editStatuses()}>{t('Edit Statuses')}</button>}
-               <button className='add-btn' onClick={() => setIsEdit(true)}>{t('Add a single lead')}</button>
-               {user.isAdmin && <form>
-                  <div className='file'>
-                     <label htmlFor='files' className="btn">{t('Import multiple leads')}</label>
-                     <input id="files" type="file" accept={".xlsx"} onChange={(e) => {
-                        const file = e.target.files[0]
-                        readExcel(file)
-                     }} />
-                  </div>
-               </form>}
-               <button className='exp-btn' onClick={() => exportLeads()}>{t('Export Leads')}</button>
-               <h1 className='title' style={{ margin: '0' }}>{t('Total Leads')}: {leads.length}</h1>
-               {(leads.length > leadsToShow.length) && (
-                  <h1 className='title' style={{ margin: '0' }}>{t('After filter')}: {leadsToShow.length}</h1>
-               )}
+            {(isEdit) && <LeadEdit setIsEdit={setIsEdit} />}
+            <div className='lead-table'>
+               <LeadTable statuses={statuses} leadsToShow={leadsToShow} leads={leads} setIsEdit={setIsEdit} filterBy={filterBy} />
+               {/* <LeadList setIsEdit={setIsEdit} leads={leads} filterBy={filterBy} /> */}
             </div>
-            <button className='refresh-btn' onClick={() => { onRefreshLeads() }}>{t('Refresh')}</button>
-         </div>
-         {(isEdit) && <LeadEdit setIsEdit={setIsEdit} />}
-         <div className='lead-table'>
-            <LeadTable leadsToShow={leadsToShow} leads={leads} setIsEdit={setIsEdit} filterBy={filterBy} />
-            {/* <LeadList setIsEdit={setIsEdit} leads={leads} filterBy={filterBy} /> */}
-         </div>
          </div>
 
       </section>

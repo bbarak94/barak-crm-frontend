@@ -1,26 +1,26 @@
+.lead-filter {
+    max-width: 12vw;
+    position: initial;
+    // background-color: wheat!important;
+    margin: 2px;
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 60px;
+    align-items: center;
+    gap: 10px;
+    flex-direction: column;
 
 
-    .lead-filter {
-        max-width: 12vw;
-        position: initial;
-        // background-color: wheat!important;
-        margin: 2px;
-        display: flex;
-        justify-content: flex-start;
-        margin-top: 60px;
-        align-items: center;
-        gap: 10px;
-        flex-direction: column;
-        
-        
-        .MuiFormControl-root ,.css-2m9kme-MuiFormControl-root{
-            max-width: 170px;
-        }
-        // margin: 0 !important;
-        h1{
-            color: white;
-        }
+    .MuiFormControl-root,
+    .css-2m9kme-MuiFormControl-root {
+        max-width: 170px;
     }
+
+    // margin: 0 !important;
+    h1 {
+        color: white;
+    }
+}
 
 
 .lead-app {
@@ -34,15 +34,17 @@
     right: 0;
     bottom: 0;
 
-    .lead-table{
-        .pagination div{
+    .lead-table {
+        .pagination div {
             // background-color: green;
             // flex-direction: row-reverse!important;
-            justify-content: center!important;
-            p{
+            justify-content: center !important;
+
+            p {
                 margin: 0;
             }
-            .MuiTablePagination-actions{
+
+            .MuiTablePagination-actions {
                 display: flex;
 
 
@@ -50,14 +52,45 @@
         }
     }
 
+    .edit-fields {
+        form {
+            max-width: 90vw;
+            flex-wrap: wrap;
+            color: white;
+            display: flex;
+            justify-content: start
+        }
+
+        .edit-field {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            // align-self: flex-end;
+
+            select{
+                height: 30px;
+                width: 120px;
+                // margin-left: 10px;
+                // margin-right: 10px;
+            }
+        }
+    button{
+        max-width: 100px;
+        max-height: 30px;
+        align-self: flex-end;
+    }
+    }
+
     div {
         form {
-            .file{
-                :hover{
+
+            .file {
+                :hover {
                     cursor: pointer;
                     color: white;
                 }
             }
+
             .file {
                 input {
                     display: none;

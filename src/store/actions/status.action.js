@@ -34,9 +34,12 @@ export function getActionUpdateStatus(status) {
 
 
 export function loadStatuses(userId) {
+    console.log('userId:',userId)
+    
     return async (dispatch) => {
         try {
             const statuses = await statusService.query(userId)
+            console.log('statuses:',statuses)            
             dispatch(getActionSetStatuses(statuses))
             return statuses
         } catch {

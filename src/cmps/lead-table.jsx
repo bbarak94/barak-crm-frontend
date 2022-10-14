@@ -38,11 +38,11 @@ import { removeLead, setLead, saveLead, loadLeads, getActionSetLead } from "../s
 import { visuallyHidden } from '@mui/utils';
 import { useEffectUpdate } from '../hooks/useEffectUpdate';
 
-export const LeadTable = ({ leadsToShow, leads, setIsEdit, filterBy }) => {
+export const LeadTable = ({ leadsToShow, leads,statuses, setIsEdit, filterBy }) => {
   const navigation = useNavigate()
   const dispatch = useDispatch()
 
-  const { statuses } = useSelector((storeState) => storeState.statusModule)
+  // const { statuses } = useSelector((storeState) => storeState.statusModule)
   const { user, users } = useSelector((storeState) => storeState.userModule)
 
   const { t, i18n } = useTranslation();

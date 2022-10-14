@@ -12,6 +12,7 @@ import MultipleSelectStatus from "./multiple-select-status";
 import MultipleSelectUser from "./multiple-select-user";
 import MultipleSelectCampaign from "./multiple-select-campaign";
 import MultipleSelectChannel from "./multiple-select-channel";
+import { loadStatuses } from "../store/actions/status.action";
 
 export const LeadFilter = ({ filterBy, user, users }) => {
    const { t, i18n } = useTranslation();
