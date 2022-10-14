@@ -1,5 +1,7 @@
 .app-navigation {
-    background-color: var(background-color);
+    // background-color: var(background-color);
+   background: var(--color-background);
+
     margin: 0 auto;
     gap: 1.6rem;
 
@@ -8,7 +10,7 @@
         background-color: var(background-color);
         // width: 14rem;
         position: absolute;
-        // top: -20px;
+        top: 20px;
         inset-inline-start: 0;
         // min-width: 250px;
 
@@ -18,16 +20,18 @@
                 padding: 16px;
             }
 
-            background-color: white;
+            // background-color: white;
             align-items: center;
             justify-content: space-between;
-            margin-top: 1.4rem;
+            // margin-top: 1.4rem;
         }
 
         .sidebar {
             background-color: white;
-            height: 160px;
-
+            // height: 100px;
+            .logout-btn{
+                color: white;
+            }
             h3 {
                 display: flex;
                 width: 100%;
@@ -52,8 +56,8 @@
 
             .logout-btn {
                 position: fixed;
-                top: 75px;
-                inset-inline-end: 90px;
+                top: 60px;
+                inset-inline-end: 15px;
                 display: flex;
                 flex-direction: row-reverse;
                 max-width: 200px;
@@ -126,12 +130,11 @@
 
     nav {
         box-sizing: border-box;
-        padding: 0 80px;
+        // padding: 0 20px;
         display: flex;
         align-items: center;
-        height: 150px;
+        height: 60px;
         width: 100vw;
-        // height: 100vh;
         font-size: 0.8em;
         background-color: var(background-color);
     }

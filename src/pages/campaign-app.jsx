@@ -22,7 +22,7 @@ export const CampaignApp = () => {
 
    const user = userService.getLoggedinUser()
    useEffect(() => {
-      if (!user) {
+      if (!user || !user.isAdmin) {
          navigation('/')
          return
       }

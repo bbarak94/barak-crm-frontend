@@ -18,7 +18,7 @@ export const SettingsApp = () => {
    const [api, setApi] = useState(user?.API_KnEY)
 
    useEffect(() => {
-      if (!user) {
+      if (!user|| !user.isAdmin) {
          navigation('/')
       }
    }, [])

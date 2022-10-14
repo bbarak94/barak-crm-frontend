@@ -1,22 +1,38 @@
 
 
     .lead-filter {
-        background-color: wheat!important;
-        margin: 20px;
-
+        max-width: 12vw;
+        position: initial;
+        // background-color: wheat!important;
+        margin: 2px;
         display: flex;
-        justify-content: center;
+        justify-content: flex-start;
+        margin-top: 60px;
         align-items: center;
         gap: 10px;
-
-        // flex-direction: column;
-        gap: 15px;
+        flex-direction: column;
+        
+        
+        .MuiFormControl-root ,.css-2m9kme-MuiFormControl-root{
+            max-width: 170px;
+        }
         // margin: 0 !important;
+        h1{
+            color: white;
+        }
     }
 
 
 .lead-app {
-    padding-top: 160px !important;
+
+    // padding-top: 160px !important;
+    display: flex;
+    margin-top: 57px !important;
+    position: absolute;
+    top: 35px;
+    left: 0;
+    right: 0;
+    bottom: 0;
 
     .lead-table{
         .pagination div{
@@ -62,7 +78,6 @@
     }
 
 
-    background: grey;
     background-size: 100% 100%;
     height: 95vh;
     margin: 0;

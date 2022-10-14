@@ -103,11 +103,11 @@ export const LeadFilter = ({ filterBy, user, users }) => {
             <h1>{t('Channels')}:</h1>
             <MultipleSelectChannel filterBy={filterBy} channel={channel} setChannel={setChannel} campaigns={campaigns} />
          </div>
-         <div className="flex column align-center">
+         {user.isAdmin && <div className="flex column align-center">
 
             <h1>{t('Creator')}:</h1>
             <MultipleSelectUser filterBy={filterBy} creator={creator} setCreator={setCreator} users={users} />
-         </div>
+         </div>}
          <button onClick={clearFilter}>
             {t('Clear filter')}
          </button>

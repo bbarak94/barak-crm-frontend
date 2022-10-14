@@ -358,6 +358,12 @@ export const LeadApp = () => {
             if (filterBy.creator.includes(lead.creator)) return lead
          })
       }
+      console.log('user:', user)
+      if (!user.isAdmin) {
+         filtered = filtered.filter((lead, idx) => {
+            if (lead.creator === user.fullname) return lead
+         })
+      }
       setLeadsToShow(filtered)
    }
 
@@ -371,6 +377,8 @@ export const LeadApp = () => {
    else return (
       <section className='lead-app'>
          <LeadFilter filterBy={filterBy} leads={leads} user={user} users={users} campaigns={campaigns} statuses={statuses} />
+         <div>
+
          {isEditStatuses && <StatusesApp setIsEditStatuses={setIsEditStatuses} isEditStatuses={isEditStatuses} />}
          {isEditFields && (
             <div className='edit-fields flex'>
@@ -408,9 +416,9 @@ export const LeadApp = () => {
          }
          <div className='flex align-center space-between' style={{ gap: '10px', marginBottom: '5px' }}>
             <div className='flex align-center'>
-               <button className='exp-btn' onClick={() => editStatuses()}>{t('Edit Statuses')}</button>
+               {user.isAdmin && <button className='exp-btn' onClick={() => editStatuses()}>{t('Edit Statuses')}</button>}
                <button className='add-btn' onClick={() => setIsEdit(true)}>{t('Add a single lead')}</button>
-               <form>
+               {user.isAdmin && <form>
                   <div className='file'>
                      <label htmlFor='files' className="btn">{t('Import multiple leads')}</label>
                      <input id="files" type="file" accept={".xlsx"} onChange={(e) => {
@@ -418,7 +426,7 @@ export const LeadApp = () => {
                         readExcel(file)
                      }} />
                   </div>
-               </form>
+               </form>}
                <button className='exp-btn' onClick={() => exportLeads()}>{t('Export Leads')}</button>
                <h1 className='title' style={{ margin: '0' }}>{t('Total Leads')}: {leads.length}</h1>
                {(leads.length > leadsToShow.length) && (
@@ -431,6 +439,7 @@ export const LeadApp = () => {
          <div className='lead-table'>
             <LeadTable leadsToShow={leadsToShow} leads={leads} setIsEdit={setIsEdit} filterBy={filterBy} />
             {/* <LeadList setIsEdit={setIsEdit} leads={leads} filterBy={filterBy} /> */}
+         </div>
          </div>
 
       </section>
