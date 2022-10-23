@@ -24,9 +24,36 @@ select {
    max-height: 100vh;
 }
 
+body[dir="RTL"] .MuiTablePagination-actions {
+
+   // flex-direction: row-reverse !important;
+   button {
+      // background-color: green;
+      transform: rotate(180deg);
+      // transform: translateX(-180);
+   }
+
+}
+
+body[dir="RTL"] .css-pdct74-MuiTablePagination-selectLabel::before {
+
+   content: "אבי ביטר"!important;
+}
+// body[dir="RTL"] .css-pdct74-MuiTablePagination-selectLabel {
+
+   // background-color: blue !important;
+   // content: "אבי ביטר"!important;
+   // display: none;
+
+// }
+
 html {
    font-family: Poppins, sans-serif;
    font-size: rem(14px);
+
+   margin: 0;
+   padding: 0;
+   height: 100%;
 }
 
 body {
@@ -34,7 +61,6 @@ body {
    height: 100vh;
    font-size: rem(18px);
    // background: var(--color-background);
-   background: grey;
 
    user-select: none;
    overflow-x: hidden;
@@ -49,7 +75,6 @@ main {
    // grid-template-columns: 18rem auto;
    grid-template-columns: auto;
    max-height: 100vh;
-   overflow-y: auto;
 }
 
 h1,

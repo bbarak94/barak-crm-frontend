@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next';
 
 import { loadLeads, saveLead } from '../store/actions/lead.action'
+import { setLoadingOff, setLoadingOn } from '../store/actions/system.action'
 import { userService } from '../services/user.service'
 
 import { LeadEdit } from '../cmps/lead-edit'
@@ -17,6 +18,9 @@ import { loadStatuses } from '../store/actions/status.action';
 import { useEffectUpdate } from '../hooks/useEffectUpdate';
 import { LeadFilter } from '../cmps/lead-filter'
 
+import { Audio } from 'react-loader-spinner'
+import { Loader } from '../cmps/loader'
+
 
 export const LeadApp = () => {
    const navigation = useNavigate()
@@ -27,6 +31,7 @@ export const LeadApp = () => {
    const { filterBy } = useSelector((storeState) => storeState.leadModule)
    const { users } = useSelector((storeState) => storeState.userModule)
    const { campaigns } = useSelector((storeState) => storeState.campaignModule)
+   const { isLoading } = useSelector((storeState) => storeState.systemModule)
 
    const user = userService.getLoggedinUser()
    const [leadsToShow, setLeadsToShow] = useState(leads)
@@ -154,6 +159,9 @@ export const LeadApp = () => {
 
 
    const onRefreshLeads = async () => {
+      console.log('test')
+      console.log('isLoading:', isLoading)
+      if (isLoading) { dispatch(setLoadingOff()) } else { dispatch(setLoadingOn()) }
       await dispatch(loadLeads(user._id))
       await dispatch(loadStatuses(user._id))
       navigation('/lead')
@@ -162,10 +170,11 @@ export const LeadApp = () => {
 
    const importLeads = async (ev) => {
       ev.preventDefault()
+      debugger
+      await dispatch(setLoadingOn())
       await addLeads(data)
-      setIsEditFields(false)
-
-
+      await setIsEditFields(false)
+      await dispatch(setLoadingOff())
    }
 
 
@@ -253,13 +262,6 @@ export const LeadApp = () => {
                data.shift();
                data.shift();
             });
-
-
-
-
-
-
-
             setData(data)
             // addLeads(data)
             resolve(data)
@@ -277,7 +279,7 @@ export const LeadApp = () => {
 
    const addLeads = async (leads) => {
 
-      leads.forEach((lead, idx) => {
+      await leads.forEach((lead, idx) => {
          const leadToSave = {
             managerName: lead[connectedFields[t('Manager Name')]] || '',
             businessName: lead[connectedFields[t('Business Name')]] || '',
@@ -299,6 +301,7 @@ export const LeadApp = () => {
 
          dispatch((saveLead(leadToSave)))
       })
+      await dispatch(setLoadingOff())
    }
 
 
@@ -358,7 +361,6 @@ export const LeadApp = () => {
             if (filterBy.creator.includes(lead.creator)) return lead
          })
       }
-      console.log('user:', user)
       if (!user.isAdmin) {
          filtered = filtered.filter((lead, idx) => {
             if (lead.creator === user.fullname) return lead
@@ -376,6 +378,15 @@ export const LeadApp = () => {
 
    else return (
       <section className='lead-app'>
+         {isLoading && <Loader
+            height="80"
+            width="80"
+            radius="9"
+            color='green'
+            ariaLabel='three-dots-loading'
+            wrapperStyle
+            wrapperClass
+         />}
          <LeadFilter filterBy={filterBy} leads={leads} user={user} users={users} campaigns={campaigns} statuses={statuses} />
          <div>
 
