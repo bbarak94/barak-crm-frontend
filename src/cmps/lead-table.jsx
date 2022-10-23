@@ -598,18 +598,11 @@ export const LeadTable = ({ leadsToShow, leads,statuses, setIsEdit, filterBy }) 
                       <TableCell align="right">{row.message}</TableCell>
                       <TableCell align="right">
                         <button onClick={
-                          (ev) => {
+                          async (ev) => {
                             ev.stopPropagation()
                             ev.preventDefault()
-                            dispatch(setLead(row._id))
+                            await dispatch(setLead(row._id))
                             setIsEdit(true)
-
-
-
-
-
-
-
                           }}>{t('Edit')}</button>
                         <button onClick={async (ev) => {
                           ev.stopPropagation()

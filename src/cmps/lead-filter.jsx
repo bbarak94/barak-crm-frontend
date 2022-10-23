@@ -77,6 +77,7 @@ export const LeadFilter = ({ filterBy, user, users }) => {
 
    return (
       <section className="lead-filter">
+            <h1 className="title">{t('Leads')}:</h1>
          <div className="flex column align-center">
 
             <h1>{t('Date')}:</h1>

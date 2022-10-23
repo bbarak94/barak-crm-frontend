@@ -170,7 +170,7 @@ export const LeadApp = () => {
 
    const importLeads = async (ev) => {
       ev.preventDefault()
-      debugger
+      
       await dispatch(setLoadingOn())
       await addLeads(data)
       await setIsEditFields(false)
@@ -206,22 +206,12 @@ export const LeadApp = () => {
       const prm = new Promise((resolve, reject) => {
          const fileReader = new FileReader()
          fileReader.readAsArrayBuffer(file)
-
          fileReader.onload = (e) => {
             const bufferArray = e.target.result
             const wb = XLSX.read(bufferArray, { type: 'buffer' })
-
             const wsname = wb.SheetNames[0]
-
             const ws = wb.Sheets[wsname]
-
-
             const data = XLSX.utils.sheet_to_json(ws)
-
-
-
-
-
             var sheet_name_list = wb.SheetNames;
             sheet_name_list.forEach(function (y) {
                var worksheet = wb.Sheets[y];
@@ -240,21 +230,17 @@ export const LeadApp = () => {
                   var col = z.substring(0, tt);
                   var row = parseInt(z.substring(tt));
                   var value = worksheet[z].v;
-
                   //store header names
                   if (row == 1 && value) {
                      headers[col] = value;
-
                      continue;
                   }
-
                   if (!data[row]) data[row] = {};
                   data[row][headers[col]] = value;
                }
                var headersArr = []
                for (const [key, value] of Object.entries(headers)) {
                   headersArr.push(value)
-
                }
                setIsEditFields(true)
                setFields(headersArr)

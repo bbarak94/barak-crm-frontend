@@ -13,6 +13,11 @@
     margin: 0 0 0 0;
     padding: 15px 10px 0 20px;
     z-index: 5;
+    .title{
+        color: black !important;
+        margin-bottom: 10px;
+        padding: 0;
+    }
 
     h1 {
         margin-bottom: 2px;
@@ -62,6 +67,10 @@
     }
 
     .edit-fields {
+        h2{
+            color: black;
+
+        }
         form {
             max-width: 90vw;
             flex-wrap: wrap;
@@ -128,7 +137,8 @@
 
     span {
         font-size: 20px;
-        color: blue;
+        // background-color: #d7d7d7;
+        color: black;
     }
 
     .title {
@@ -149,20 +159,26 @@
 
     table {
         width: 100%;
-        margin: 30px auto 80px auto;
         border-spacing: 0;
         border-collapse: collapse;
 
         td,
         th {
-            padding: 6px 6px;
+            // padding: 6px 6px;
+            padding: 0px 6px;
             border: 1px solid #ddd;
             text-align: center;
         }
+        th{
+            color: black !important;
+
+        }
 
         thead:first-child {
-            background-color: cornflowerblue;
-            color: white;
+            // background-color: cornflowerblue;
+            background-color: #d7d7d7;
+            // color: white;
+            color: black !important;
         }
 
         tbody tr:nth-child(even) {
